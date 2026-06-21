@@ -5,8 +5,8 @@ $request = service('request'); ?>
 $layout = (!empty($core->layout_backend)) ? $core->layout_backend : 'hamkamannan\adminigniter\Views\layout\backend\main'; ?>
 <?= $this->extend($layout); ?>
 <?= $this->section('style'); ?>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" integrity="sha512-LEcCbgUWPBUGbPctNaH+oxZRo415/rpwfqUQXcT4gS+gZyUTb8OIBV288vKAPLqbqsskLKQxgXOz4fr794XZhg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.dataTables.min.css" integrity="sha512-CcNusIkGgfUxM0NVvaVf61WMPiopR/PWjXHjKrDG54v8B/KsK+sePEwc7UAH+13BI4/NDtIgiNCheqO56q1hnw==" crossorigin="anonymous">
 <?= $this->endSection('style'); ?>
 
 <?= $this->section('page'); ?>
@@ -68,13 +68,13 @@ $layout = (!empty($core->layout_backend)) ? $core->layout_backend : 'hamkamannan
 
 <?= $this->section('script'); ?>
 
-<script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js" integrity="sha512-uT8p7/mpKoahsdDmAnB3SnJ2K+nra0rZdMbnDleK43bysgLjq1L8tSsP1cBb+DZJSeY2himH/gF4MsWcMZ1DSg==" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js" integrity="sha512-OXWGUAvUDZVkoYTlDDWSeyxp3lMSCBhQtLyUOizHQtusq/krTINZ1OWwzrf+8qQW3Ng0f89UhOdBt1wddwEQKA==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" integrity="sha512-oaT4uVdyleJGVHZqklOx2Bb8WhOTBW3iCXRtgk3+YutYmFx0jSs97UR3/+r1vh1Isyb3GOGjFonLbS6LFiiEVA==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" integrity="sha512-guWTt6syHB4T9gdPdw8W1iQUGqqricRt5VRjnjgMPpOhUhwOsxmXpk2SImqfcPgsiroK00z/loICebflVeJvqg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" integrity="sha512-vv3EN6dNaQeEWDcxrKPFYSFba/kgm//IUnvLPMPadaUf5+ylZyx4cKxuc4HdBf0PPAlM7560DV63ZcolRJFPqA==" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js" integrity="sha512-i6U13L2Z182HBSt5k9d+Pcm1vpPIqAGymKzEhfCMFjDJLmm6kW7OQqcZdBE168mZbvRs08jjp9ED995fPg1JFw==" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js" integrity="sha512-M2WF3C4rL4Nx73w0Re+xGQK7eoj7y59vhqXBbMJXuDpwYrg3QJcRrv8H+8g/UfqsKrkw8mgZ3eIQ8Cymg62oxw==" crossorigin="anonymous"></script>
 
 <script>
     var t;

@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-lg-3 col-md-6 mb-4">
             <div class="card text-center border-0 shadow h-100">
                 <div class="card-body bg-success text-white rounded">
@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-lg-3 col-md-6 mb-4">
             <div class="card text-center border-0 shadow h-100">
                 <div class="card-body bg-info text-white rounded">
@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-lg-3 col-md-6 mb-4">
             <div class="card text-center border-0 shadow h-100">
                 <div class="card-body bg-warning text-white rounded">
@@ -87,9 +87,9 @@
                 <div class="card-body">
                     <?php if (!empty($by_gender)): ?>
                         <div class="row text-center mb-3">
-                            <?php 
+                            <?php
                             $colors = ['primary', 'danger', 'secondary'];
-                            foreach ($by_gender as $index => $gender): 
+                            foreach ($by_gender as $index => $gender):
                                 $percentage = ($gender->total / $total_members) * 100;
                                 $color = $colors[$index % count($colors)];
                             ?>
@@ -102,7 +102,7 @@
                                 </div>
                             <?php endforeach; ?>
                         </div>
-                        
+
                         <canvas id="genderChart" height="100"></canvas>
                     <?php else: ?>
                         <div class="text-center text-muted py-4">
@@ -128,10 +128,10 @@
                         <div class="mb-3 text-center">
                             <h4 class="text-success">Usia Rata-rata: <?= number_format($avg_age ?? 0, 1) ?> tahun</h4>
                         </div>
-                        
-                        <?php 
+
+                        <?php
                         $maxCount = max(array_column($by_age_range, 'total'));
-                        foreach ($by_age_range as $age): 
+                        foreach ($by_age_range as $age):
                             $percentage = ($age->total / $total_members) * 100;
                             $barWidth = ($age->total / $maxCount) * 100;
                         ?>
@@ -141,9 +141,9 @@
                                     <span class="badge bg-success"><?= number_format($age->total) ?> (<?= number_format($percentage, 1) ?>%)</span>
                                 </div>
                                 <div class="progress" style="height: 25px;">
-                                    <div class="progress-bar bg-success" 
-                                         style="width: <?= $barWidth ?>%"
-                                         title="<?= $age->total ?> anggota">
+                                    <div class="progress-bar bg-success"
+                                        style="width: <?= $barWidth ?>%"
+                                        title="<?= $age->total ?> anggota">
                                     </div>
                                 </div>
                             </div>
@@ -182,7 +182,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($by_education as $edu): 
+                                    <?php foreach ($by_education as $edu):
                                         $percentage = ($edu->total / $total_members) * 100;
                                     ?>
                                         <tr>
@@ -213,53 +213,53 @@
 
         <!-- Job Distribution -->
         <div class="col-lg-6 mb-4">
-    <div class="card shadow border-0 h-100">
-        <div class="card-header bg-warning text-white">
-            <h5 class="mb-0">
-                <i class="fas fa-briefcase me-2"></i>
-                Distribusi Berdasarkan Pekerjaan
-            </h5>
-        </div>
-        <div class="card-body">
-            <?php if (!empty($by_job)): ?>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Jenis Pekerjaan</th>
-                                <th class="text-end">Jumlah</th>
-                                <th class="text-end">Persentase</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($by_job as $job): 
-                                $percentage = ($total_members > 0) ? ($job->total / $total_members) * 100 : 0;
-                            ?>
-                                <tr>
-                                    <td>
-                                        <i class="fas fa-user-tie text-warning me-2"></i>
-                                        <?= esc($job->job_name ?? 'Tidak Diisi/Lainnya') ?>
-                                    </td>
-                                    <td class="text-end">
-                                        <strong><?= number_format($job->total) ?></strong>
-                                    </td>
-                                    <td class="text-end">
-                                        <span class="badge bg-warning text-dark"><?= number_format($percentage, 1) ?>%</span>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+            <div class="card shadow border-0 h-100">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-briefcase me-2"></i>
+                        Distribusi Berdasarkan Pekerjaan
+                    </h5>
                 </div>
-            <?php else: ?>
-                <div class="text-center text-muted py-4">
-                    <i class="fas fa-briefcase fa-3x mb-3"></i>
-                    <p>Tidak ada data pekerjaan tersedia</p>
+                <div class="card-body">
+                    <?php if (!empty($by_job)): ?>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Jenis Pekerjaan</th>
+                                        <th class="text-end">Jumlah</th>
+                                        <th class="text-end">Persentase</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($by_job as $job):
+                                        $percentage = ($total_members > 0) ? ($job->total / $total_members) * 100 : 0;
+                                    ?>
+                                        <tr>
+                                            <td>
+                                                <i class="fas fa-user-tie text-warning me-2"></i>
+                                                <?= esc($job->job_name ?? 'Tidak Diisi/Lainnya') ?>
+                                            </td>
+                                            <td class="text-end">
+                                                <strong><?= number_format($job->total) ?></strong>
+                                            </td>
+                                            <td class="text-end">
+                                                <span class="badge bg-warning text-dark"><?= number_format($percentage, 1) ?>%</span>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php else: ?>
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-briefcase fa-3x mb-3"></i>
+                            <p>Tidak ada data pekerjaan tersedia</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
-            <?php endif; ?>
+            </div>
         </div>
-    </div>
-</div>
     </div>
 
     <!-- Registration Trends -->
@@ -298,7 +298,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <canvas id="registrationChart" height="100"></canvas>
                     <?php else: ?>
                         <div class="text-center text-muted py-4">
@@ -334,9 +334,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php 
+                                    <?php
                                     $maxProvince = $by_province[0]->total ?? 1;
-                                    foreach ($by_province as $index => $province): 
+                                    foreach ($by_province as $index => $province):
                                         $percentage = ($province->total / $maxProvince) * 100;
                                     ?>
                                         <tr>
@@ -350,8 +350,8 @@
                                             </td>
                                             <td>
                                                 <div class="progress" style="height: 20px; width: 200px;">
-                                                    <div class="progress-bar" 
-                                                         style="width: <?= $percentage ?>%; background: linear-gradient(135deg, #667eea, #764ba2);">
+                                                    <div class="progress-bar"
+                                                        style="width: <?= $percentage ?>%; background: linear-gradient(135deg, #667eea, #764ba2);">
                                                         <?= number_format(($province->total / $total_members) * 100, 1) ?>%
                                                     </div>
                                                 </div>
@@ -383,7 +383,7 @@
                 </div>
                 <div class="card-body">
                     <?php if (!empty($by_marital_status)): ?>
-                        <?php foreach ($by_marital_status as $marital): 
+                        <?php foreach ($by_marital_status as $marital):
                             $percentage = ($marital->total / $total_members) * 100;
                         ?>
                             <div class="mb-3">
@@ -412,7 +412,7 @@
                 </div>
                 <div class="card-body">
                     <?php if (!empty($by_identity_type)): ?>
-                        <?php foreach ($by_identity_type as $identity): 
+                        <?php foreach ($by_identity_type as $identity):
                             $percentage = ($identity->total / $total_members) * 100;
                         ?>
                             <div class="mb-3">
@@ -453,42 +453,42 @@
                                 <?php if (!empty($by_gender) && isset($by_gender[0])): ?>
                                     <li class="mb-2">
                                         <i class="fas fa-check text-success me-2"></i>
-                                        Mayoritas anggota berjenis kelamin <strong><?= $by_gender[0]->gender ?></strong> 
+                                        Mayoritas anggota berjenis kelamin <strong><?= $by_gender[0]->gender ?></strong>
                                         (<?= number_format(($by_gender[0]->total / $total_members) * 100, 1) ?>%)
                                     </li>
                                 <?php endif; ?>
-                                
-                                <?php if (!empty($by_age_range)): 
-                                    $maxAgeGroup = array_reduce($by_age_range, function($carry, $item) {
+
+                                <?php if (!empty($by_age_range)):
+                                    $maxAgeGroup = array_reduce($by_age_range, function ($carry, $item) {
                                         return (!$carry || $item->total > $carry->total) ? $item : $carry;
                                     });
                                 ?>
                                     <li class="mb-2">
                                         <i class="fas fa-check text-success me-2"></i>
-                                        Rentang usia terbanyak: <strong><?= $maxAgeGroup->age_range ?></strong> 
+                                        Rentang usia terbanyak: <strong><?= $maxAgeGroup->age_range ?></strong>
                                         (<?= number_format($maxAgeGroup->total) ?> anggota)
                                     </li>
                                 <?php endif; ?>
-                                
+
                                 <li class="mb-2">
                                     <i class="fas fa-check text-success me-2"></i>
-                                    Pertumbuhan anggota tahun ini: 
+                                    Pertumbuhan anggota tahun ini:
                                     <strong class="<?= $growth_rate >= 0 ? 'text-success' : 'text-danger' ?>">
                                         <?= $growth_rate >= 0 ? '+' : '' ?><?= number_format($growth_rate, 1) ?>%
                                     </strong>
                                 </li>
-                                
+
                                 <?php if (!empty($by_province) && isset($by_province[0])): ?>
                                     <li class="mb-2">
                                         <i class="fas fa-check text-success me-2"></i>
-                                        Provinsi dengan anggota terbanyak: 
-                                        <strong><?= $by_province[0]->province ?></strong> 
+                                        Provinsi dengan anggota terbanyak:
+                                        <strong><?= $by_province[0]->province ?></strong>
                                         (<?= number_format($by_province[0]->total) ?> anggota)
                                     </li>
                                 <?php endif; ?>
                             </ul>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <h6 class="text-warning mb-3">
                                 <i class="fas fa-star me-2"></i>Rekomendasi:
@@ -564,241 +564,248 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous"></script>
 
 <script>
-// Chart colors
-const chartColors = {
-    primary: '#0d6efd',
-    success: '#198754',
-    danger: '#dc3545',
-    warning: '#ffc107',
-    info: '#0dcaf0',
-    secondary: '#6c757d'
-};
+    // Chart colors
+    const chartColors = {
+        primary: '#0d6efd',
+        success: '#198754',
+        danger: '#dc3545',
+        warning: '#ffc107',
+        info: '#0dcaf0',
+        secondary: '#6c757d'
+    };
 
-// Gender Distribution Chart
-<?php if (!empty($by_gender)): ?>
-const genderCtx = document.getElementById('genderChart');
-if (genderCtx) {
-    const genderData = <?= json_encode($by_gender) ?>;
-    const genderLabels = genderData.map(item => item.gender);
-    const genderValues = genderData.map(item => item.total);
-    
-    new Chart(genderCtx, {
-        type: 'doughnut',
-        data: {
-            labels: genderLabels,
-            datasets: [{
-                data: genderValues,
-                backgroundColor: [
-                    chartColors.primary,
-                    chartColors.danger,
-                    chartColors.secondary
-                ],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 15,
-                        font: {
-                            size: 12
+    // Gender Distribution Chart
+    <?php if (!empty($by_gender)): ?>
+        const genderCtx = document.getElementById('genderChart');
+        if (genderCtx) {
+            const genderData = <?= json_encode($by_gender) ?>;
+            const genderLabels = genderData.map(item => item.gender);
+            const genderValues = genderData.map(item => item.total);
+
+            new Chart(genderCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: genderLabels,
+                    datasets: [{
+                        data: genderValues,
+                        backgroundColor: [
+                            chartColors.primary,
+                            chartColors.danger,
+                            chartColors.secondary
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                font: {
+                                    size: 12
+                                }
+                            }
                         }
                     }
                 }
-            }
+            });
         }
-    });
-}
-<?php endif; ?>
+    <?php endif; ?>
 
-// Job Distribution Chart
-<?php if (!empty($by_job)): ?>
-const jobCtx = document.getElementById('jobChart');
+    // Job Distribution Chart
+    <?php if (!empty($by_job)): ?>
+        const jobCtx = document.getElementById('jobChart');
 
-if (jobCtx) {
-    const jobData = <?= json_encode($by_job) ?>;
-    const jobLabels = jobData.map(item => {
-        const name = item.job_name || 'Tidak Diketahui';
-        return name.length > 15 ? name.substring(0, 15) + '...' : name;
-    });
-    const jobValues = jobData.map(item => item.total);
-   
-    
-    new Chart(jobCtx, {
-        type: 'bar',
-        data: {
-            labels: jobLabels,
-            datasets: [{
-                label: 'Jumlah Anggota',
-                data: jobValues,
-                backgroundColor: chartColors.warning,
-                borderRadius: 5
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        precision: 0
+        if (jobCtx) {
+            const jobData = <?= json_encode($by_job) ?>;
+            const jobLabels = jobData.map(item => {
+                const name = item.job_name || 'Tidak Diketahui';
+                return name.length > 15 ? name.substring(0, 15) + '...' : name;
+            });
+            const jobValues = jobData.map(item => item.total);
+
+
+            new Chart(jobCtx, {
+                type: 'bar',
+                data: {
+                    labels: jobLabels,
+                    datasets: [{
+                        label: 'Jumlah Anggota',
+                        data: jobValues,
+                        backgroundColor: chartColors.warning,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
                     }
                 }
-            }
+            });
         }
-    });
-}
-<?php endif; ?>
+    <?php endif; ?>
 
-// Registration Trend Chart
-<?php if (!empty($by_month)): ?>
-const registrationCtx = document.getElementById('registrationChart');
-if (registrationCtx) {
-    const monthData = <?= json_encode($by_month) ?>;
-    const monthLabels = monthData.map(item => item.month_name).reverse();
-    const monthValues = monthData.map(item => item.total).reverse();
-    
-    new Chart(registrationCtx, {
-        type: 'line',
-        data: {
-            labels: monthLabels,
-            datasets: [{
-                label: 'Pendaftaran Anggota',
-                data: monthValues,
-                borderColor: chartColors.primary,
-                backgroundColor: 'rgba(13, 110, 253, 0.1)',
-                fill: true,
-                tension: 0.4,
-                pointRadius: 5,
-                pointHoverRadius: 7
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        precision: 0
+    // Registration Trend Chart
+    <?php if (!empty($by_month)): ?>
+        const registrationCtx = document.getElementById('registrationChart');
+        if (registrationCtx) {
+            const monthData = <?= json_encode($by_month) ?>;
+            const monthLabels = monthData.map(item => item.month_name).reverse();
+            const monthValues = monthData.map(item => item.total).reverse();
+
+            new Chart(registrationCtx, {
+                type: 'line',
+                data: {
+                    labels: monthLabels,
+                    datasets: [{
+                        label: 'Pendaftaran Anggota',
+                        data: monthValues,
+                        borderColor: chartColors.primary,
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
                     }
                 }
-            }
+            });
         }
-    });
-}
-<?php endif; ?>
+    <?php endif; ?>
 
-// Export functionality
-function exportStatistics(format) {
-    const params = new URLSearchParams({
-        'export': 'members_statistics',
-        'format': format
-    });
-    
-    const url = `<?= base_url('opac/export') ?>?${params.toString()}`;
-    window.open(url, '_blank');
-    
-    showToast(`Export statistik anggota ${format.toUpperCase()} dimulai...`, 'info');
-}
+    // Export functionality
+    function exportStatistics(format) {
+        const params = new URLSearchParams({
+            'export': 'members_statistics',
+            'format': format
+        });
 
-// Toast notification
-function showToast(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
-    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 350px;';
-    toast.innerHTML = `
+        const url = `<?= base_url('opac/export') ?>?${params.toString()}`;
+        window.open(url, '_blank');
+
+        showToast(`Export statistik anggota ${format.toUpperCase()} dimulai...`, 'info');
+    }
+
+    // Toast notification
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 350px;';
+        toast.innerHTML = `
         ${message}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        if (toast.parentNode) {
-            toast.parentNode.removeChild(toast);
-        }
-    }, 3000);
-}
 
-// Print styles
-window.addEventListener('beforeprint', function() {
-    document.querySelectorAll('.btn, .alert').forEach(el => el.style.display = 'none');
-    document.body.classList.add('printing');
-});
+        document.body.appendChild(toast);
 
-window.addEventListener('afterprint', function() {
-    document.querySelectorAll('.btn, .alert').forEach(el => el.style.display = '');
-    document.body.classList.remove('printing');
-});
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 3000);
+    }
 
-// Auto-refresh (optional - every 5 minutes)
-setInterval(function() {
-    console.log('Auto-refresh statistics...');
-    // Uncomment to enable auto-refresh
-    // location.reload();
-}, 300000);
+    // Print styles
+    window.addEventListener('beforeprint', function() {
+        document.querySelectorAll('.btn, .alert').forEach(el => el.style.display = 'none');
+        document.body.classList.add('printing');
+    });
+
+    window.addEventListener('afterprint', function() {
+        document.querySelectorAll('.btn, .alert').forEach(el => el.style.display = '');
+        document.body.classList.remove('printing');
+    });
+
+    // Auto-refresh (optional - every 5 minutes)
+    setInterval(function() {
+        console.log('Auto-refresh statistics...');
+        // Uncomment to enable auto-refresh
+        // location.reload();
+    }, 300000);
 </script>
 
 <style>
-@media print {
-    .btn, .alert, .card-header {
-        display: none !important;
+    @media print {
+
+        .btn,
+        .alert,
+        .card-header {
+            display: none !important;
+        }
+
+        .card {
+            border: 1px solid #dee2e6 !important;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .container {
+            max-width: 100% !important;
+        }
+
+        .col-lg-3,
+        .col-lg-4,
+        .col-lg-6,
+        .col-lg-8,
+        .col-lg-12 {
+            width: 100% !important;
+        }
     }
-    
+
     .card {
-        border: 1px solid #dee2e6 !important;
-        break-inside: avoid;
-        page-break-inside: avoid;
+        transition: transform 0.2s;
     }
-    
-    .container {
-        max-width: 100% !important;
+
+    .card:hover {
+        transform: translateY(-2px);
     }
-    
-    .col-lg-3, .col-lg-4, .col-lg-6, .col-lg-8, .col-lg-12 {
-        width: 100% !important;
+
+    .progress {
+        background-color: #e9ecef;
     }
-}
 
-.card {
-    transition: transform 0.2s;
-}
+    .table th {
+        font-weight: 600;
+        background-color: #f8f9fa;
+    }
 
-.card:hover {
-    transform: translateY(-2px);
-}
-
-.progress {
-    background-color: #e9ecef;
-}
-
-.table th {
-    font-weight: 600;
-    background-color: #f8f9fa;
-}
-
-canvas {
-    max-height: 400px;
-}
+    canvas {
+        max-height: 400px;
+    }
 </style>
 <?= $this->endSection() ?>
