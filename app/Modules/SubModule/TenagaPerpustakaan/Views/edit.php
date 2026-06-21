@@ -323,7 +323,7 @@
                         <div class="form-group">
                             <label for="tmt_jabatan">TMT Jabatan</label>
                             <input type="text" class="form-control" id="tmt_jabatan" name="tmt_jabatan" 
-                                   value="<?= old('tmt_jabatan', $pustakawan->tmt_jabatan ?? '') ?>">
+                                   value="<?= htmlspecialchars(old('tmt_jabatan', $pustakawan->tmt_jabatan ?? ''), ENT_QUOTES, 'UTF-8') ?>">
                             <small class="form-text text-muted">Terhitung Mulai Tanggal Jabatan</small>
                         </div>
                     </div>
