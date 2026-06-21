@@ -7,22 +7,24 @@ $date_to = $request->getGet('date_to') ?? '';
 <?= $this->extend('App\Views\layout\main'); ?>
 <?= $this->section('style'); ?>
 <style>
-.preview-container {
-    margin-top: 20px;
-    border-top: 1px solid #dee2e6;
-    padding-top: 20px;
-}
-.preview-table {
-    max-height: 500px;
-    overflow-y: auto;
-}
-.filter-section {
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 15px;
-    background-color: #f8f9fa;
-}
+    .preview-container {
+        margin-top: 20px;
+        border-top: 1px solid #dee2e6;
+        padding-top: 20px;
+    }
+
+    .preview-table {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .filter-section {
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background-color: #f8f9fa;
+    }
 </style>
 <?= $this->endSection('style'); ?>
 
@@ -52,7 +54,7 @@ $date_to = $request->getGet('date_to') ?? '';
 
     <div class="card">
         <div class="card-header">
-            <h5><strong>Export Data Buku Tamu</strong></h5>
+            <h5><strong>Export Alwi Buku Tamu</strong></h5>
         </div>
         <div class="card-body">
             <?php if (session('errors')) : ?>
@@ -65,7 +67,7 @@ $date_to = $request->getGet('date_to') ?? '';
 
             <form action="<?= base_url('laporan-buku-tamu/export') ?>" method="post">
                 <?= csrf_field() ?>
-                
+
                 <div class="form-group mb-3">
                     <label><b>Pilih Kolom yang akan diekspor</b></label>
                     <div class="mb-2">
@@ -182,7 +184,7 @@ $date_to = $request->getGet('date_to') ?? '';
                     </select>
                 </div>
 
-                 <!-- Room Filter Section -->
+                <!-- Room Filter Section -->
                 <div class="form-group mb-3">
                     <label><strong>Filter Berdasarkan Ruang Perpustakaan</strong></label>
                     <select class="form-control" name="room" id="room">
@@ -217,7 +219,7 @@ $date_to = $request->getGet('date_to') ?? '';
                     </select>
                 </div>
 
-               <div class="text-center mb-3">
+                <div class="text-center mb-3">
                     <button type="submit" class="btn btn-success btn-lg">
                         <i class="fas fa-download"></i> Export to Excel
                     </button>
@@ -242,94 +244,94 @@ $date_to = $request->getGet('date_to') ?? '';
 <?= $this->section('script'); ?>
 
 <script>
-$('#location').change(function(e) {
-    var Location_Library_id = $("#location option:selected").val();
-    getData(`<?= base_url('api/eksemplar/locations') ?>/${Location_Library_id}`, `#room`, false,
-        `-- Semua Ruang Perpustakaan --`);
-});
+    $('#location').change(function(e) {
+        var Location_Library_id = $("#location option:selected").val();
+        getData(`<?= base_url('api/eksemplar/locations') ?>/${Location_Library_id}`, `#room`, false,
+            `-- Semua Ruang Perpustakaan --`);
+    });
 
-$(document).ready(function() {
-    // Function to update preview table
-    function updatePreview() {
-        const selectedColumns = [];
-        $('input[name="columns[]"]:checked').each(function() {
-            selectedColumns.push($(this).val());
-        });
+    $(document).ready(function() {
+        // Function to update preview table
+        function updatePreview() {
+            const selectedColumns = [];
+            $('input[name="columns[]"]:checked').each(function() {
+                selectedColumns.push($(this).val());
+            });
 
-        const filterType = $('#filter_type').val();
-        const genderId = $('#gender_id').val(); // Get selected gender
-        const visitor_type = $('#visitor_type').val();
-        const location = $('#location').val();
-        const room = $('#room').val();
-        const destination = $('#destination').val();
-        const kop = $('#kop').val();
-        const formData = new FormData();
-        
-        formData.append('columns', JSON.stringify(selectedColumns));
-        formData.append('filter_type', filterType);
-        formData.append('gender_id', genderId); // Add gender filter to form data
-        formData.append('visitor_type', visitor_type); 
-        formData.append('location', location); 
-        formData.append('room', room);
-        formData.append('destination', destination);
-        formData.append('kop', kop);
+            const filterType = $('#filter_type').val();
+            const genderId = $('#gender_id').val(); // Get selected gender
+            const visitor_type = $('#visitor_type').val();
+            const location = $('#location').val();
+            const room = $('#room').val();
+            const destination = $('#destination').val();
+            const kop = $('#kop').val();
+            const formData = new FormData();
 
-        // Add appropriate date filters based on filter type
-        if (filterType === 'date') {
-            formData.append('start_date', $('input[name="start_date"]').val());
-            formData.append('end_date', $('input[name="end_date"]').val());
-        } else if (filterType === 'month') {
-            formData.append('month', $('select[name="month"]').val());
-            formData.append('year', $('#month_filter select[name="year"]').val());
-        } else if (filterType === 'year') {
-            formData.append('year', $('#year_filter select[name="year"]').val());
+            formData.append('columns', JSON.stringify(selectedColumns));
+            formData.append('filter_type', filterType);
+            formData.append('gender_id', genderId); // Add gender filter to form data
+            formData.append('visitor_type', visitor_type);
+            formData.append('location', location);
+            formData.append('room', room);
+            formData.append('destination', destination);
+            formData.append('kop', kop);
+
+            // Add appropriate date filters based on filter type
+            if (filterType === 'date') {
+                formData.append('start_date', $('input[name="start_date"]').val());
+                formData.append('end_date', $('input[name="end_date"]').val());
+            } else if (filterType === 'month') {
+                formData.append('month', $('select[name="month"]').val());
+                formData.append('year', $('#month_filter select[name="year"]').val());
+            } else if (filterType === 'year') {
+                formData.append('year', $('#year_filter select[name="year"]').val());
+            }
+
+            // Show loading indicator
+            $('#preview-table').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Memuat preview data...</p></div>');
+
+            // Make AJAX call to get preview data
+            $.ajax({
+                url: '<?= base_url('laporan-buku-tamu/preview') ?>',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    $('#preview-table').html(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching preview:', error);
+                }
+            });
         }
 
-        // Show loading indicator
-        $('#preview-table').html('<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Memuat preview data...</p></div>');
-
-        // Make AJAX call to get preview data
-        $.ajax({
-            url: '<?= base_url('laporan-buku-tamu/preview') ?>',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                $('#preview-table').html(response);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching preview:', error);
-            }
+        // Select all columns toggle
+        $('#select_all_columns').change(function() {
+            $('.column-checkbox').prop('checked', $(this).is(':checked'));
+            updatePreview();
         });
-    }
 
-    // Select all columns toggle
-    $('#select_all_columns').change(function() {
-        $('.column-checkbox').prop('checked', $(this).is(':checked'));
+        // Sync select-all state when individual checkboxes change
+        $(document).on('change', '.column-checkbox', function() {
+            var total = $('.column-checkbox').length;
+            var checked = $('.column-checkbox:checked').length;
+            $('#select_all_columns').prop('checked', total === checked);
+        });
+
+        // Event listeners for form changes
+        $('input[name="columns[]"], #filter_type, #gender_id, #visitor_type, #location, #room, #destination').change(updatePreview);
+        $('input[name="start_date"], input[name="end_date"]').change(updatePreview);
+        $('select[name="month"], select[name="year"]').change(updatePreview);
+
+        // Initial preview load
         updatePreview();
+
+        // Show/hide filter sections
+        $('#filter_type').change(function() {
+            $('.filter-section').hide();
+            $('#' + $(this).val() + '_filter').show();
+        });
     });
-
-    // Sync select-all state when individual checkboxes change
-    $(document).on('change', '.column-checkbox', function() {
-        var total = $('.column-checkbox').length;
-        var checked = $('.column-checkbox:checked').length;
-        $('#select_all_columns').prop('checked', total === checked);
-    });
-
-    // Event listeners for form changes
-    $('input[name="columns[]"], #filter_type, #gender_id, #visitor_type, #location, #room, #destination').change(updatePreview);
-    $('input[name="start_date"], input[name="end_date"]').change(updatePreview);
-    $('select[name="month"], select[name="year"]').change(updatePreview);
-
-    // Initial preview load
-    updatePreview();
-
-    // Show/hide filter sections
-    $('#filter_type').change(function() {
-        $('.filter-section').hide();
-        $('#' + $(this).val() + '_filter').show();
-    });
-});
 </script>
 <?= $this->endSection('script'); ?>

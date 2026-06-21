@@ -15,7 +15,7 @@ $slug = $request->getGet('slug') ?? '';
                 <div class="page-title-icon">
                     <i class="pe-7s-network icon-gradient bg-strong-bliss"></i>
                 </div>
-                <div>Berita <?= ucwords(unslugify($slug)) ?>
+                <div>Berita Buku <?= ucwords(unslugify($slug)) ?>
                     <div class="page-title-subheading">Daftar semua Berita
                     </div>
                 </div>
@@ -80,7 +80,7 @@ $slug = $request->getGet('slug') ?? '';
                 html: '<?= session()->getFlashdata('swal_html') ?? session()->getFlashdata('swal_text') ?>',
                 showConfirmButton: false,
                 timer: 3000,
-                icon:'success'
+                icon: 'success'
             });
         <?php endif; ?>
     });
