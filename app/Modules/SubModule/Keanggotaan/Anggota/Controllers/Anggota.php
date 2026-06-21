@@ -146,7 +146,7 @@ class Anggota extends \Base\Controllers\BaseController
 
 	public function index()
 	{
-		
+
 		$this->data['title'] = ' Anggota';
 		$this->data['message'] = $this->validation->getErrors()
 			? $this->validation->listErrors()
@@ -430,9 +430,9 @@ class Anggota extends \Base\Controllers\BaseController
 
 				$users->insert($data_user);
 
-				   $this->session->setFlashdata('swal_icon', 'success');
-                $this->session->setFlashdata('swal_title', 'Berhasil');
-                $this->session->setFlashdata('swal_text', 'Anggota berhasil disimpan');
+				$this->session->setFlashdata('swal_icon', 'success');
+				$this->session->setFlashdata('swal_title', 'Berhasil');
+				$this->session->setFlashdata('swal_text', 'Anggota berhasil disimpan');
 				return redirect()->to('/anggota');
 			} else {
 				$this->session->setFlashdata('swal_icon', 'error');
@@ -442,21 +442,26 @@ class Anggota extends \Base\Controllers\BaseController
 			}
 		} else {
 			$this->data['redirect'] = base_url('anggota/create');
-		   $this->session->setFlashdata('message', $this->validation->getErrors() ? $this->validation->listErrors() : '');
+			$this->session->setFlashdata('message', $this->validation->getErrors() ? $this->validation->listErrors() : '');
 			echo view('Anggota\Views\add', $this->data);
 		}
 	}
 
 	public function camera()
 	{
-		// $files = (array) $this->request->getPost('file_image');
 		$filename = 'pic_' . date('YmdHis') . '.jpeg';
 		$url = '';
+
 		if (move_uploaded_file($_FILES['file_image']['tmp_name'], 'upload/' . $filename)) {
-			$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']) . '/upload/' . $filename;
+			// Sanitasi $_SERVER values
+			$host = htmlspecialchars($_SERVER['HTTP_HOST'], ENT_QUOTES, 'UTF-8');
+			$uri = htmlspecialchars(dirname($_SERVER['REQUEST_URI']), ENT_QUOTES, 'UTF-8');
+
+			$url = 'http://' . $host . $uri . '/upload/' . $filename;
 		}
-		// Return image url
-		echo $url;
+
+		// Sanitasi output
+		echo htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 	}
 
 	public function profile()
@@ -468,7 +473,7 @@ class Anggota extends \Base\Controllers\BaseController
 	}
 
 	public function edit(int $ID = null, $is_anggota = false)
-	{ 
+	{
 		if (!is_allowed('anggota/edit')) {
 			// Jika AJAX request
 			if ($this->request->isAJAX()) {
@@ -481,7 +486,7 @@ class Anggota extends \Base\Controllers\BaseController
 			set_message('toastr_msg', 'Maaf, Anda tidak memiliki akses');
 			set_message('toastr_type', 'error');
 			return redirect()->to('anggota');
-		} 
+		}
 		$db = db_connect();
 		$jenisperpustakaan = $db->table('settingparameters')->where('Name', 'JenisPerpustakaan')->get()->getRow()->Value ?: "UMUM";
 
@@ -546,7 +551,7 @@ class Anggota extends \Base\Controllers\BaseController
 					'required' => 'Status Anggota tidak boleh kosong',
 				],
 			],
-		]);  
+		]);
 		if ($this->request->getPost()) {
 			if ($this->validation->withRequest($this->request)->run()) {
 				$update_data = [
@@ -900,7 +905,7 @@ class Anggota extends \Base\Controllers\BaseController
 		echo view('Anggota\Views\import');
 	}
 
-	
+
 
 	public function import()
 	{
@@ -1217,7 +1222,7 @@ class Anggota extends \Base\Controllers\BaseController
 		return null;
 	}
 
-	
+
 
 
 
@@ -1403,7 +1408,7 @@ class Anggota extends \Base\Controllers\BaseController
 		$dompdf->stream();
 	}
 
-	
+
 
 	public function uploadBackground()
 	{
@@ -1591,181 +1596,177 @@ class Anggota extends \Base\Controllers\BaseController
 	}
 
 
-public function aktifkan_online()
-{
-    if (!$this->request->is('post')) {
-        return $this->response->setJSON([
-            'error' => true,
-            'message' => 'Method tidak diizinkan'
-        ]);
-    }
+	public function aktifkan_online()
+	{
+		if (!$this->request->is('post')) {
+			return $this->response->setJSON([
+				'error' => true,
+				'message' => 'Method tidak diizinkan'
+			]);
+		}
 
-    $memberIds = $this->request->getPost('member_ids');
+		$memberIds = $this->request->getPost('member_ids');
 
-    if (empty($memberIds) || !is_array($memberIds)) {
-        return $this->response->setJSON([
-            'error' => true,
-            'message' => 'Tidak ada anggota yang dipilih'
-        ]);
-    }
+		if (empty($memberIds) || !is_array($memberIds)) {
+			return $this->response->setJSON([
+				'error' => true,
+				'message' => 'Tidak ada anggota yang dipilih'
+			]);
+		}
 
-    $db = db_connect();
-    $memberModel = $this->anggotaModel;
-    $userModel = new \User\Models\UserModel();
+		$db = db_connect();
+		$memberModel = $this->anggotaModel;
+		$userModel = new \User\Models\UserModel();
 
-    $successCount = $failCount = $existingCount = 0;
-    $errors = [];
+		$successCount = $failCount = $existingCount = 0;
+		$errors = [];
 
-    // Fetch Members sekaligus (lebih efisien)
-    $members = $memberModel->whereIn('ID', $memberIds)->findAll();
+		// Fetch Members sekaligus (lebih efisien)
+		$members = $memberModel->whereIn('ID', $memberIds)->findAll();
 
-    if (empty($members)) {
-        return $this->response->setJSON([
-            'error' => true,
-            'message' => 'Data anggota tidak ditemukan'
-        ]);
-    }
+		if (empty($members)) {
+			return $this->response->setJSON([
+				'error' => true,
+				'message' => 'Data anggota tidak ditemukan'
+			]);
+		}
 
-    $db->transBegin();
+		$db->transBegin();
 
-    try {
-        foreach ($members as $member) {
+		try {
+			foreach ($members as $member) {
 
-            if (empty($member->MemberNo) || empty($member->Email)) {
-                $failCount++;
-                $errors[] = "Data anggota ".esc($member->Fullname)." tidak lengkap";
-                continue;
-            }
+				if (empty($member->MemberNo) || empty($member->Email)) {
+					$failCount++;
+					$errors[] = "Data anggota " . esc($member->Fullname) . " tidak lengkap";
+					continue;
+				}
 
-            // Cek user sudah ada
-            $existingUser = $userModel->where('username', $member->MemberNo)
-                                      ->orWhere('email', $member->Email)
-                                      ->first();
+				// Cek user sudah ada
+				$existingUser = $userModel->where('username', $member->MemberNo)
+					->orWhere('email', $member->Email)
+					->first();
 
-            if ($existingUser) {
-                $existingCount++;
-                continue;
-            }
+				if ($existingUser) {
+					$existingCount++;
+					continue;
+				}
 
-            $passwordHash = $this->password->hash($member->MemberNo);
+				$passwordHash = $this->password->hash($member->MemberNo);
 
-            $userData = [
-                'username'      => $member->MemberNo,
-                'email'         => $member->Email,
-                'first_name'    => $member->Fullname,
-                'password_hash' => $passwordHash,
-                'category'      => 'anggota',
-                'active'        => 1,
-                'created_at'    => date('Y-m-d H:i:s'),
-            ];
-			
+				$userData = [
+					'username'      => $member->MemberNo,
+					'email'         => $member->Email,
+					'first_name'    => $member->Fullname,
+					'password_hash' => $passwordHash,
+					'category'      => 'anggota',
+					'active'        => 1,
+					'created_at'    => date('Y-m-d H:i:s'),
+				];
 
-           if ($userModel->insert($userData)) {
-				$successCount++;
 
-				// Tandai anggota sebagai aktif online
-				$memberModel->update($member->ID, ['IsOnlineActive' => 1]);
+				if ($userModel->insert($userData)) {
+					$successCount++;
 
-				// Insert ke tabel auth_group_users
-				$userId = $userModel->insertID();
-				$db->table('auth_groups_users')->insert([
-					'group_id' => 8,
-					'user_id'  => $userId
-				]);
+					// Tandai anggota sebagai aktif online
+					$memberModel->update($member->ID, ['IsOnlineActive' => 1]);
 
-			} else {
-				$failCount++;
-				$errors[] = "Gagal aktivasi akun untuk ".esc($member->Fullname);
+					// Insert ke tabel auth_group_users
+					$userId = $userModel->insertID();
+					$db->table('auth_groups_users')->insert([
+						'group_id' => 8,
+						'user_id'  => $userId
+					]);
+				} else {
+					$failCount++;
+					$errors[] = "Gagal aktivasi akun untuk " . esc($member->Fullname);
+				}
 			}
 
-        }
+			if ($db->transStatus() === false) {
+				$db->transRollback();
+				return $this->response->setJSON([
+					'error' => true,
+					'message' => 'Kesalahan database, transaksi dibatalkan.'
+				]);
+			}
 
-        if ($db->transStatus() === false) {
-            $db->transRollback();
-            return $this->response->setJSON([
-                'error' => true,
-                'message' => 'Kesalahan database, transaksi dibatalkan.'
-            ]);
-        }
+			$db->transCommit();
+		} catch (\Exception $e) {
+			$db->transRollback();
+			return $this->response->setJSON([
+				'error' => true,
+				'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+			]);
+		}
 
-        $db->transCommit();
-    }
-    catch (\Exception $e) {
-        $db->transRollback();
-        return $this->response->setJSON([
-            'error' => true,
-            'message' => 'Terjadi kesalahan: '.$e->getMessage()
-        ]);
-    }
-
-    // Inline HTML Message (tanpa view)
-    $message = "<div class='text-left'>
+		// Inline HTML Message (tanpa view)
+		$message = "<div class='text-left'>
         <p><strong>Hasil Aktivasi Online:</strong></p>
         <ul>
             <li>✓ Berhasil: <strong>{$successCount}</strong> anggota</li>";
-    if ($existingCount > 0) {
-        $message .= "<li>⚠ Sudah aktif: <strong>{$existingCount}</strong> anggota</li>";
-    }
-    if ($failCount > 0) {
-        $message .= "<li>✗ Gagal: <strong>{$failCount}</strong> anggota</li>";
-    }
-    $message .= "</ul>";
+		if ($existingCount > 0) {
+			$message .= "<li>⚠ Sudah aktif: <strong>{$existingCount}</strong> anggota</li>";
+		}
+		if ($failCount > 0) {
+			$message .= "<li>✗ Gagal: <strong>{$failCount}</strong> anggota</li>";
+		}
+		$message .= "</ul>";
 
-    if (!empty($errors)) {
-        $message .= "<hr><p><strong>Detail Error:</strong></p><ul>";
-        foreach ($errors as $err) {
-            $message .= "<li class='text-danger small'>".esc($err)."</li>";
-        }
-        $message .= "</ul>";
-    }
+		if (!empty($errors)) {
+			$message .= "<hr><p><strong>Detail Error:</strong></p><ul>";
+			foreach ($errors as $err) {
+				$message .= "<li class='text-danger small'>" . esc($err) . "</li>";
+			}
+			$message .= "</ul>";
+		}
 
-    $message .= "</div>";
+		$message .= "</div>";
 
-    return $this->response->setJSON([
-        'error' => false,
-        'message' => $message,
-        'data' => [
-            'success' => $successCount,
-            'existing' => $existingCount,
-            'failed' => $failCount
-        ]
-    ]);
-}
+		return $this->response->setJSON([
+			'error' => false,
+			'message' => $message,
+			'data' => [
+				'success' => $successCount,
+				'existing' => $existingCount,
+				'failed' => $failCount
+			]
+		]);
+	}
 
-// File: app/Controllers/Anggota.php
+	// File: app/Controllers/Anggota.php
 
-public function getDefaults($jenisAnggotaId)
-{
-        $db = \Config\Database::connect();
+	public function getDefaults($jenisAnggotaId)
+	{
+		$db = \Config\Database::connect();
 
-        // 1. Ambil Default Koleksi (CollectionCategory)
-        $collections = $db->table('collectioncategorysdefault')
-            ->select('CollectionCategory_id')
-            ->where('JenisAnggota_id', $jenisAnggotaId)
-            ->get()
-            ->getResultArray();
-        
-        // Convert ke simple array: [1, 2, 5]
-        $collectionIds = array_column($collections, 'CollectionCategory_id');
+		// 1. Ambil Default Koleksi (CollectionCategory)
+		$collections = $db->table('collectioncategorysdefault')
+			->select('CollectionCategory_id')
+			->where('JenisAnggota_id', $jenisAnggotaId)
+			->get()
+			->getResultArray();
 
-        // 2. Ambil Default Lokasi (LocationLibrary)
-        $locations = $db->table('location_library_default')
-            ->select('Location_Library_id')
-            ->where('JenisAnggota_id', $jenisAnggotaId)
-            ->get()
-            ->getResultArray();
-            
-        // Convert ke simple array: [3, 4]
-        $locationIds = array_column($locations, 'Location_Library_id');
+		// Convert ke simple array: [1, 2, 5]
+		$collectionIds = array_column($collections, 'CollectionCategory_id');
 
-        return $this->response->setJSON([
-            'success' => true,
-            'collections' => $collectionIds,
-            'locations' => $locationIds
-        ]);
-    
-    
-    return $this->response->setStatusCode(404);
-}
+		// 2. Ambil Default Lokasi (LocationLibrary)
+		$locations = $db->table('location_library_default')
+			->select('Location_Library_id')
+			->where('JenisAnggota_id', $jenisAnggotaId)
+			->get()
+			->getResultArray();
 
+		// Convert ke simple array: [3, 4]
+		$locationIds = array_column($locations, 'Location_Library_id');
+
+		return $this->response->setJSON([
+			'success' => true,
+			'collections' => $collectionIds,
+			'locations' => $locationIds
+		]);
+
+
+		return $this->response->setStatusCode(404);
+	}
 }

@@ -72,7 +72,7 @@ $request = service('request');
                             <div>
                                 <input type="text" class="form-control" id="frm_edit_jumlah" name="Jumlah" 
                                     placeholder="<?= lang('Sumbangan.field.total') ?>" 
-                                    value="<?= old('Jumlah') ?? $sumbangan->Jumlah; ?>" />
+                                    value="<?= htmlspecialchars(old('Jumlah') ?? $sumbangan->Jumlah, ENT_QUOTES, 'UTF-8'); ?>" />
                             </div>
                         </div>
                     </div>
@@ -84,7 +84,7 @@ $request = service('request');
                         <textarea id="frm_edit_description" name="Keterangan" 
                             placeholder="<?= lang('Sumbangan.field.description') ?>" 
                             rows="3" class="form-control autosize-input" 
-                            style="min-height: 38px;"><?= old('Keterangan') ?? $sumbangan->Keterangan; ?></textarea>
+                            style="min-height: 38px;"><?= htmlspecialchars(old('Keterangan') ?? $sumbangan->Keterangan, ENT_QUOTES, 'UTF-8'); ?></textarea>
                     </div>
                 </div>
 

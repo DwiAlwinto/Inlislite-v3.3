@@ -118,7 +118,7 @@
                         <div class="form-group">
                             <label for="nama" class="required">Nama Lengkap</label>
                             <input type="text" class="form-control" id="nama" name="nama" 
-                                   value="<?= old('nama') ?>" required>
+                                   value="<?= htmlspecialchars(old('nama'), ENT_QUOTES, 'UTF-8') ?>" required>
                             <small class="form-text text-muted">Masukkan nama lengkap pustakawan</small>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                         <div class="form-group">
                             <label for="nip" class="required">NIP</label>
                             <input type="text" class="form-control" id="nip" name="nip" 
-                                   value="<?= old('nip') ?>" required>
+                                   value="<?= htmlspecialchars(old('nip'), ENT_QUOTES, 'UTF-8') ?>" required>
                             <small class="form-text text-muted">Nomor Induk Pegawai</small>
                         </div>
                     </div>
@@ -137,14 +137,14 @@
                         <div class="form-group">
                             <label for="tempat_lahir">Tempat Lahir</label>
                             <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" 
-                                   value="<?= old('tempat_lahir') ?>" placeholder="Contoh: Jakarta">
+                                   value="<?= htmlspecialchars(old('tempat_lahir'), ENT_QUOTES, 'UTF-8') ?>" placeholder="Contoh: Jakarta">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="tanggal_lahir">Tanggal Lahir</label>
                             <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" 
-                                   value="<?= old('tanggal_lahir') ?>">
+                                   value="<?= htmlspecialchars(old('tanggal_lahir'), ENT_QUOTES, 'UTF-8') ?>">
                         </div>
                     </div>
                 </div>
@@ -185,7 +185,7 @@
                         <div class="form-group">
                             <label for="bidang_pendidikan">Bidang Pendidikan</label>
                             <input type="text" class="form-control" id="bidang_pendidikan" name="bidang_pendidikan" 
-                                   value="<?= old('bidang_pendidikan') ?>" 
+                                   value="<?= htmlspecialchars(old('bidang_pendidikan'), ENT_QUOTES, 'UTF-8') ?>" 
                                    placeholder="Contoh: Ilmu Perpustakaan, Informatika, Sastra Indonesia, dll">
                             <small class="form-text text-muted">Jurusan atau bidang studi yang diambil</small>
                         </div>
@@ -205,7 +205,7 @@
                         <div class="form-group">
                             <label for="no_hp">No. HP / WhatsApp</label>
                             <input type="text" class="form-control" id="no_hp" name="no_hp" 
-                                   value="<?= old('no_hp') ?>" placeholder="Contoh: 081234567890">
+                                   value="<?= htmlspecialchars(old('no_hp'), ENT_QUOTES, 'UTF-8') ?>" placeholder="Contoh: 081234567890">
                             <small class="form-text text-muted">Nomor telepon yang bisa dihubungi</small>
                         </div>
                     </div>
@@ -213,7 +213,7 @@
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" name="email" 
-                                   value="<?= old('email') ?>" placeholder="contoh@email.com">
+                                   value="<?= htmlspecialchars(old('email'), ENT_QUOTES, 'UTF-8') ?>" placeholder="contoh@email.com">
                             <small class="form-text text-muted">Alamat email yang valid dan aktif</small>
                         </div>
                     </div>
@@ -250,7 +250,7 @@
                         <div class="form-group">
                             <label for="jabatan">Jabatan</label>
                             <input type="text" class="form-control" id="jabatan" name="jabatan" 
-                                   value="<?= old('jabatan') ?>" 
+                                   value="<?= htmlspecialchars(old('jabatan'), ENT_QUOTES, 'UTF-8') ?>" 
                                    placeholder="Contoh: Pustakawan Ahli Madya, Kepala Perpustakaan">
                         </div>
                     </div>
@@ -295,7 +295,7 @@
                         <div class="form-group">
                             <label for="tmt_pangkat">TMT Pangkat</label>
                             <input type="date" class="form-control" id="tmt_pangkat" name="tmt_pangkat" 
-                                   value="<?= old('tmt_pangkat') ?>">
+                                   value="<?= htmlspecialchars(old('tmt_pangkat'), ENT_QUOTES, 'UTF-8') ?>">
                             <small class="form-text text-muted">Terhitung Mulai Tanggal Pangkat</small>
                         </div>
                     </div>
@@ -306,7 +306,7 @@
                         <div class="form-group">
                             <label for="tmt_jabatan">TMT Jabatan</label>
                             <input type="date" class="form-control" id="tmt_jabatan" name="tmt_jabatan" 
-                                   value="<?= old('tmt_jabatan') ?>">
+                                   value="<?= htmlspecialchars(old('tmt_jabatan'), ENT_QUOTES, 'UTF-8') ?>">
                             <small class="form-text text-muted">Terhitung Mulai Tanggal Jabatan</small>
                         </div>
                     </div>
@@ -325,7 +325,7 @@
                         <div class="form-group">
                             <label for="linkdrive">Link Google Drive</label>
                             <input type="url" class="form-control" id="linkdrive" name="linkdrive" 
-                                   value="<?= old('linkdrive') ?>" 
+                                   value="<?= htmlspecialchars(old('linkdrive'), ENT_QUOTES, 'UTF-8') ?>" 
                                    placeholder="https://drive.google.com/drive/folders/...">
                             <small class="form-text text-muted">Link folder Google Drive yang berisi dokumen-dokumen pendukung (CV, Ijazah, SK, dll)</small>
                         </div>
