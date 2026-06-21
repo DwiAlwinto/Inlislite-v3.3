@@ -337,20 +337,32 @@
 			opacity: 0;
 			transform: translateY(30px);
 		}
+
 		to {
 			opacity: 1;
 			transform: translateY(0);
 		}
 	}
 
-	.content-wrapper > * {
+	.content-wrapper>* {
 		animation: fadeInUp 0.6s ease forwards;
 	}
 
-	.content-wrapper > *:nth-child(1) { animation-delay: 0.1s; }
-	.content-wrapper > *:nth-child(2) { animation-delay: 0.2s; }
-	.content-wrapper > *:nth-child(3) { animation-delay: 0.3s; }
-	.content-wrapper > *:nth-child(4) { animation-delay: 0.4s; }
+	.content-wrapper>*:nth-child(1) {
+		animation-delay: 0.1s;
+	}
+
+	.content-wrapper>*:nth-child(2) {
+		animation-delay: 0.2s;
+	}
+
+	.content-wrapper>*:nth-child(3) {
+		animation-delay: 0.3s;
+	}
+
+	.content-wrapper>*:nth-child(4) {
+		animation-delay: 0.4s;
+	}
 </style>
 
 <div class="page-container" style="padding-top: 100px !important; padding-bottom: 40px !important;">
@@ -368,7 +380,7 @@
 					<span class="active">Bukan Anggota</span>
 				</nav>
 			</div><br>
-				<h2 style="background-color: #28a745; color: #fff; padding: 10px; border-radius: 5px;">Total Kunjungan Hari ini <?=$totalKunjungan ?? '0'?></h2>
+			<h2 style="background-color: #28a745; color: #fff; padding: 10px; border-radius: 5px;">Total Kunjungan Hari ini <?= $totalKunjungan ?? '0' ?></h2>
 		</div>
 
 		<!-- Navigation Tabs -->
@@ -408,17 +420,17 @@
 
 			<form id="frm_create" method="post" action="<?= base_url('buku-tamu/non_anggota') ?>">
 				<?= csrf_field() ?>
-				
+
 				<!-- Nama Pengunjung -->
 				<div class="form-group">
 					<label for="Nama" class="required">Nama Pengunjung</label>
-					<input type="text" 
-						   class="form-control <?= session('errors.Nama') ? 'is-invalid' : '' ?>" 
-						   name="Nama" 
-						   id="Nama" 
-						   placeholder="Masukkan nama lengkap Anda"
-						   value="<?= old('Nama') ?>" 
-						   required>
+					<input type="text"
+						class="form-control <?= session('errors.Nama') ? 'is-invalid' : '' ?>"
+						name="Nama"
+						id="Nama"
+						placeholder="Masukkan nama lengkap Anda"
+						value="<?= htmlspecialchars(old('Nama'), ENT_QUOTES, 'UTF-8') ?>"
+						required>
 					<?php if (session('errors.Nama')) : ?>
 						<div class="invalid-feedback"><?= session('errors.Nama') ?></div>
 					<?php endif; ?>
@@ -428,10 +440,10 @@
 				<div class="form-row-3">
 					<div class="form-group">
 						<label for="Profesi_id" class="required">Pekerjaan</label>
-						<select class="form-control <?= session('errors.Profesi_id') ? 'is-invalid' : '' ?>" 
-								name="Profesi_id" 
-								id="Profesi_id" 
-								required>
+						<select class="form-control <?= session('errors.Profesi_id') ? 'is-invalid' : '' ?>"
+							name="Profesi_id"
+							id="Profesi_id"
+							required>
 							<option value="">-- Pilih Pekerjaan --</option>
 							<?php foreach (get_ref_table('master_pekerjaan', 'id, pekerjaan', null, 'data') as $row) : ?>
 								<option value="<?= $row->id ?>" <?= old('Profesi_id') == $row->id ? 'selected' : '' ?>>
@@ -446,10 +458,10 @@
 
 					<div class="form-group">
 						<label for="PendidikanTerakhir_id" class="required">Pendidikan Terakhir</label>
-						<select class="form-control <?= session('errors.PendidikanTerakhir_id') ? 'is-invalid' : '' ?>" 
-								name="PendidikanTerakhir_id" 
-								id="PendidikanTerakhir_id" 
-								required>
+						<select class="form-control <?= session('errors.PendidikanTerakhir_id') ? 'is-invalid' : '' ?>"
+							name="PendidikanTerakhir_id"
+							id="PendidikanTerakhir_id"
+							required>
 							<option value="">-- Pilih Pendidikan --</option>
 							<?php foreach (get_ref_table('master_pendidikan', 'id, Nama', null, 'data') as $row) : ?>
 								<option value="<?= $row->id ?>" <?= old('PendidikanTerakhir_id') == $row->id ? 'selected' : '' ?>>
@@ -464,10 +476,10 @@
 
 					<div class="form-group">
 						<label for="JenisKelamin_id" class="required">Jenis Kelamin</label>
-						<select class="form-control <?= session('errors.JenisKelamin_id') ? 'is-invalid' : '' ?>" 
-								name="JenisKelamin_id" 
-								id="JenisKelamin_id" 
-								required>
+						<select class="form-control <?= session('errors.JenisKelamin_id') ? 'is-invalid' : '' ?>"
+							name="JenisKelamin_id"
+							id="JenisKelamin_id"
+							required>
 							<option value="">-- Pilih Jenis Kelamin --</option>
 							<?php foreach (get_ref_table('jenis_kelamin', 'ID, Name', 'active=1', 'data') as $row) : ?>
 								<option value="<?= $row->ID ?>" <?= old('JenisKelamin_id') == $row->ID ? 'selected' : '' ?>>
@@ -484,31 +496,31 @@
 				<!-- Alamat -->
 				<div class="form-group">
 					<label for="Alamat">Alamat Sesuai Identitas</label>
-					<textarea id="Alamat" 
-							  name="Alamat" 
-							  class="form-control <?= session('errors.Alamat') ? 'is-invalid' : '' ?>" 
-							  placeholder="Masukkan alamat lengkap sesuai identitas"
-							  rows="3"><?= old('Alamat') ?></textarea>
+					<textarea id="Alamat"
+						name="Alamat"
+						class="form-control <?= session('errors.Alamat') ? 'is-invalid' : '' ?>"
+						placeholder="Masukkan alamat lengkap sesuai identitas"
+						rows="3"><?= htmlspecialchars(old('Alamat'), ENT_QUOTES, 'UTF-8') ?></textarea>
 					<?php if (session('errors.Alamat')) : ?>
 						<div class="invalid-feedback"><?= session('errors.Alamat') ?></div>
 					<?php endif; ?>
 				</div>
 				<?php if ($SettingBukuTamu == 1) : ?>
 					<div class="form-group">
-							<div class="col-md-6" style="padding-left: 0;">
-								
-									<label for="TujuanKunjungan_id">Tujuan Kunjungan</label>
-									<select class="form-control" name="TujuanKunjungan_id" id="TujuanKunjungan_id">
-									  <option value="" disabled selected> ----- Pilih ----- </option>
-									  <?php foreach ($tujuan_kunjungan as $row) : ?>
-											<?php // PERBAIKAN: Menyamakan ID dengan id 
-											?>
-											<option value="<?= $row->ID ?>" <?= set_select('TujuanKunjungan_id', $row->ID) ?>><?= $row->TujuanKunjungan ?></option>
-										<?php endforeach; ?>
-									</select>
-							
-							</div>
+						<div class="col-md-6" style="padding-left: 0;">
+
+							<label for="TujuanKunjungan_id">Tujuan Kunjungan</label>
+							<select class="form-control" name="TujuanKunjungan_id" id="TujuanKunjungan_id">
+								<option value="" disabled selected> ----- Pilih ----- </option>
+								<?php foreach ($tujuan_kunjungan as $row) : ?>
+									<?php // PERBAIKAN: Menyamakan ID dengan id 
+									?>
+									<option value="<?= $row->ID ?>" <?= set_select('TujuanKunjungan_id', $row->ID) ?>><?= $row->TujuanKunjungan ?></option>
+								<?php endforeach; ?>
+							</select>
+
 						</div>
+					</div>
 				<?php endif; ?>
 
 				<!-- Submit Button -->
@@ -531,63 +543,63 @@
 </div>
 
 <script>
-// Auto-focus pada input pertama
-document.addEventListener('DOMContentLoaded', function() {
-	const firstInput = document.getElementById('Nama');
-	if (firstInput) {
-		firstInput.focus();
-	}
-
-	// Auto-hide validation alerts after 7 seconds
-	const validationAlert = document.getElementById('validationAlert');
-	
-	if (validationAlert) {
-		setTimeout(() => {
-			validationAlert.style.animation = 'fadeOut 0.5s ease forwards';
-			setTimeout(() => {
-				validationAlert.style.display = 'none';
-			}, 500);
-		}, 7000);
-	}
-
-	// Check for toastr messages dan tampilkan sebagai notifikasi
-	checkToastrMessages();
-});
-
-// Function untuk check toastr messages
-function checkToastrMessages() {
-	<?php if (get_message('toastr_msg')): ?>
-		const toastrMsg = "<?= get_message('toastr_msg') ?>";
-		const toastrType = "<?= get_message('toastr_type') ?>";
-		
-		if (toastrMsg && toastrType) {
-			showCustomNotification(toastrMsg, toastrType);
-			
-			// Clear the messages after showing
-			<?php 
-			unset_message('toastr_msg'); 
-			unset_message('toastr_type'); 
-			?>
+	// Auto-focus pada input pertama
+	document.addEventListener('DOMContentLoaded', function() {
+		const firstInput = document.getElementById('Nama');
+		if (firstInput) {
+			firstInput.focus();
 		}
-	<?php endif; ?>
-}
 
-// Function untuk show custom notification
-function showCustomNotification(message, type) {
-	const alertClass = type === 'success' ? 'alert-success-custom' : 'alert-error-custom';
-	const iconClass = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-	const title = type === 'success' ? 'Berhasil!' : 'Perhatian!';
-	
-	const notification = document.createElement('div');
-	notification.className = `alert-custom ${alertClass}`;
-	notification.style.position = 'fixed';
-	notification.style.top = '20px';
-	notification.style.right = '20px';
-	notification.style.zIndex = '9999';
-	notification.style.minWidth = '300px';
-	notification.style.animation = 'slideInRight 0.5s ease forwards';
-	
-	notification.innerHTML = `
+		// Auto-hide validation alerts after 7 seconds
+		const validationAlert = document.getElementById('validationAlert');
+
+		if (validationAlert) {
+			setTimeout(() => {
+				validationAlert.style.animation = 'fadeOut 0.5s ease forwards';
+				setTimeout(() => {
+					validationAlert.style.display = 'none';
+				}, 500);
+			}, 7000);
+		}
+
+		// Check for toastr messages dan tampilkan sebagai notifikasi
+		checkToastrMessages();
+	});
+
+	// Function untuk check toastr messages
+	function checkToastrMessages() {
+		<?php if (get_message('toastr_msg')): ?>
+			const toastrMsg = "<?= get_message('toastr_msg') ?>";
+			const toastrType = "<?= get_message('toastr_type') ?>";
+
+			if (toastrMsg && toastrType) {
+				showCustomNotification(toastrMsg, toastrType);
+
+				// Clear the messages after showing
+				<?php
+				unset_message('toastr_msg');
+				unset_message('toastr_type');
+				?>
+			}
+		<?php endif; ?>
+	}
+
+	// Function untuk show custom notification
+	function showCustomNotification(message, type) {
+		const alertClass = type === 'success' ? 'alert-success-custom' : 'alert-error-custom';
+		const iconClass = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+		const title = type === 'success' ? 'Berhasil!' : 'Perhatian!';
+
+		const notification = document.createElement('div');
+		notification.className = `alert-custom ${alertClass}`;
+		notification.style.position = 'fixed';
+		notification.style.top = '20px';
+		notification.style.right = '20px';
+		notification.style.zIndex = '9999';
+		notification.style.minWidth = '300px';
+		notification.style.animation = 'slideInRight 0.5s ease forwards';
+
+		notification.innerHTML = `
 		<i class="${iconClass}"></i>
 		<div>
 			<strong>${title}</strong><br>
@@ -597,78 +609,78 @@ function showCustomNotification(message, type) {
 			<span>&times;</span>
 		</button>
 	`;
-	
-	document.body.appendChild(notification);
-	
-	// Auto remove after 5 seconds
-	setTimeout(() => {
-		notification.style.animation = 'slideOutRight 0.5s ease forwards';
-		setTimeout(() => {
-			if (notification.parentNode) {
-				notification.remove();
-			}
-		}, 500);
-	}, 5000);
-}
 
-// Form validation
-document.getElementById('frm_create').addEventListener('submit', function(e) {
-	const saveBtn = document.getElementById('saveBtn');
-	const btnText = saveBtn.querySelector('.btn-text');
-	const btnLoading = saveBtn.querySelector('.btn-loading');
-	
-	// Basic validation
-	const nama = document.getElementById('Nama').value.trim();
-	const profesi = document.getElementById('Profesi_id').value;
-	const pendidikan = document.getElementById('PendidikanTerakhir_id').value;
-	const jenisKelamin = document.getElementById('JenisKelamin_id').value;
-	
-	if (!nama || !profesi || !pendidikan || !jenisKelamin) {
-		e.preventDefault();
-		showCustomNotification('Mohon lengkapi semua field yang wajib diisi (bertanda *)', 'error');
-		return false;
+		document.body.appendChild(notification);
+
+		// Auto remove after 5 seconds
+		setTimeout(() => {
+			notification.style.animation = 'slideOutRight 0.5s ease forwards';
+			setTimeout(() => {
+				if (notification.parentNode) {
+					notification.remove();
+				}
+			}, 500);
+		}, 5000);
 	}
-	
-	// Show loading state
-	saveBtn.disabled = true;
-	btnText.style.display = 'none';
-	btnLoading.style.display = 'inline-flex';
-	
-	// Set timeout untuk re-enable button jika ada error (fallback)
-	setTimeout(() => {
-		if (saveBtn.disabled) {
-			saveBtn.disabled = false;
-			btnText.style.display = 'inline-flex';
-			btnLoading.style.display = 'none';
-		}
-	}, 10000); // 10 detik timeout
-});
 
-// Remove validation styling on input
-document.querySelectorAll('.form-control').forEach(input => {
-	input.addEventListener('input', function() {
-		this.classList.remove('is-invalid');
-		const feedback = this.parentNode.querySelector('.invalid-feedback');
-		if (feedback) {
-			feedback.style.display = 'none';
-		}
-	});
-});
+	// Form validation
+	document.getElementById('frm_create').addEventListener('submit', function(e) {
+		const saveBtn = document.getElementById('saveBtn');
+		const btnText = saveBtn.querySelector('.btn-text');
+		const btnLoading = saveBtn.querySelector('.btn-loading');
 
-// Animasi untuk alerts
-document.querySelectorAll('.alert-close').forEach(button => {
-	button.addEventListener('click', function() {
-		const alert = this.parentElement;
-		alert.style.animation = 'fadeOut 0.3s ease forwards';
+		// Basic validation
+		const nama = document.getElementById('Nama').value.trim();
+		const profesi = document.getElementById('Profesi_id').value;
+		const pendidikan = document.getElementById('PendidikanTerakhir_id').value;
+		const jenisKelamin = document.getElementById('JenisKelamin_id').value;
+
+		if (!nama || !profesi || !pendidikan || !jenisKelamin) {
+			e.preventDefault();
+			showCustomNotification('Mohon lengkapi semua field yang wajib diisi (bertanda *)', 'error');
+			return false;
+		}
+
+		// Show loading state
+		saveBtn.disabled = true;
+		btnText.style.display = 'none';
+		btnLoading.style.display = 'inline-flex';
+
+		// Set timeout untuk re-enable button jika ada error (fallback)
 		setTimeout(() => {
-			alert.style.display = 'none';
-		}, 300);
+			if (saveBtn.disabled) {
+				saveBtn.disabled = false;
+				btnText.style.display = 'inline-flex';
+				btnLoading.style.display = 'none';
+			}
+		}, 10000); // 10 detik timeout
 	});
-});
 
-// Add animations
-const style = document.createElement('style');
-style.textContent = `
+	// Remove validation styling on input
+	document.querySelectorAll('.form-control').forEach(input => {
+		input.addEventListener('input', function() {
+			this.classList.remove('is-invalid');
+			const feedback = this.parentNode.querySelector('.invalid-feedback');
+			if (feedback) {
+				feedback.style.display = 'none';
+			}
+		});
+	});
+
+	// Animasi untuk alerts
+	document.querySelectorAll('.alert-close').forEach(button => {
+		button.addEventListener('click', function() {
+			const alert = this.parentElement;
+			alert.style.animation = 'fadeOut 0.3s ease forwards';
+			setTimeout(() => {
+				alert.style.display = 'none';
+			}, 300);
+		});
+	});
+
+	// Add animations
+	const style = document.createElement('style');
+	style.textContent = `
 	@keyframes fadeOut {
 		from { opacity: 1; transform: translateY(0); }
 		to { opacity: 0; transform: translateY(-20px); }
@@ -696,21 +708,21 @@ style.textContent = `
 		}
 	}
 `;
-document.head.appendChild(style);
+	document.head.appendChild(style);
 </script>
 
 <?php if (session()->getFlashdata('success')) : ?>
-<script>
-	document.addEventListener('DOMContentLoaded', function () {
-		Swal.fire({
-			icon: 'success',
-			title: 'Berhasil!',
-			text: '<?= session()->getFlashdata('success') ?>',
-			showConfirmButton: false,
-			timer: 2000
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			Swal.fire({
+				icon: 'success',
+				title: 'Berhasil!',
+				text: '<?= session()->getFlashdata('success') ?>',
+				showConfirmButton: false,
+				timer: 2000
+			});
 		});
-	});
-</script>
+	</script>
 <?php endif; ?>
 
 <?= $this->endsection() ?>
