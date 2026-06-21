@@ -16,11 +16,11 @@ class MitraPerpustakaan extends \Base\Controllers\BaseController
 
     function __construct()
     {
-          // Get the permissions from session
-          $this->authPermissions = session()->get('auth_permissions');
-        
-          // Check if the current method is allowed to be accessed
-          $this->checkMethodAccess();
+        // Get the permissions from session
+        $this->authPermissions = session()->get('auth_permissions');
+
+        // Check if the current method is allowed to be accessed
+        $this->checkMethodAccess();
         $this->mitraperpustakaanModel = new \MitraPerpustakaan\Models\MitraPerpustakaanModel();
         $this->uploadPath = ROOTPATH . 'public/uploads/';
         $this->modulePath = ROOTPATH . 'public/uploads/master-mitra-perpustakaan/';
@@ -39,8 +39,8 @@ class MitraPerpustakaan extends \Base\Controllers\BaseController
     {
         // Get the current URI path
         $currentPath = uri_string();
-     
-        
+
+
         // Check if this path exists in auth_permissions
         if (!isset($this->authPermissions[$currentPath])) {
             // Method not allowed - redirect to dashboard
@@ -49,10 +49,10 @@ class MitraPerpustakaan extends \Base\Controllers\BaseController
     }
     public function index()
     {
-       
-     
-      
-       
+
+
+
+
         $this->data['title'] = 'Mitra Perpustakaan';
         echo view('MitraPerpustakaan\Views\list', $this->data);
     }
@@ -66,13 +66,13 @@ class MitraPerpustakaan extends \Base\Controllers\BaseController
         $this->validation->setRule('url', 'URL', 'required');
         if ($this->request->getPost() && $this->validation->withRequest($this->request)->run()) {
             $url = $this->request->getPost('url');
-          
+
             // Initialize cURL session
             $ch = curl_init($url);
 
             // Set cURL options
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
             // Add more cURL options as needed (e.g., SSL options)
 
             // Execute cURL session and get the JSON content
@@ -89,7 +89,7 @@ class MitraPerpustakaan extends \Base\Controllers\BaseController
 
             $json = json_decode($json_str, false);
             $rows = $json->data;
-           
+
 
             $save_data = array();
             $update_data = array();
