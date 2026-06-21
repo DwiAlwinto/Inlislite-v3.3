@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +16,7 @@
                 color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
-            
+
             body {
                 margin: 0;
                 padding: 0;
@@ -24,15 +25,16 @@
                 height: 100vh;
                 overflow: hidden;
             }
-            
-            .controls, .upload-section {
+
+            .controls,
+            .upload-section {
                 display: none !important;
             }
-            
+
             .status {
                 display: none !important;
             }
-            
+
             .card-container {
                 margin: 0 !important;
                 box-shadow: none !important;
@@ -49,7 +51,7 @@
                 margin-left: -402px;
                 margin-top: -247px;
             }
-            
+
             @page {
                 margin: 0;
                 size: landscape;
@@ -74,7 +76,7 @@
             background: white;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
             text-align: center;
             max-width: 800px;
@@ -151,7 +153,7 @@
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         /* Preset Colors */
@@ -169,7 +171,7 @@
             border-radius: 50%;
             cursor: pointer;
             border: 3px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             transition: transform 0.2s;
         }
 
@@ -284,18 +286,39 @@
 
         /* Animations */
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
         }
 
         @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.08; transform: rotate(45deg) scale(1); }
-            50% { opacity: 0.15; transform: rotate(45deg) scale(1.1); }
+
+            0%,
+            100% {
+                opacity: 0.08;
+                transform: rotate(45deg) scale(1);
+            }
+
+            50% {
+                opacity: 0.15;
+                transform: rotate(45deg) scale(1.1);
+            }
         }
 
         /* --- Content Sections --- */
@@ -311,7 +334,7 @@
             margin-bottom: 40px;
             text-align: left;
             letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
         }
 
         .terms-list {
@@ -329,7 +352,7 @@
             line-height: 1.4;
             display: flex;
             align-items: flex-start;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
         }
 
         .terms-list li::before {
@@ -349,7 +372,7 @@
             margin: 30px 0;
             z-index: 10;
             position: relative;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         /* --- Footer Section --- */
@@ -365,7 +388,7 @@
             color: #2c5530;
             margin-bottom: 8px;
             line-height: 1.3;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
         }
 
         .office-address {
@@ -373,7 +396,7 @@
             font-weight: 500;
             color: #2c5530;
             opacity: 0.9;
-            text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
         }
 
         /* --- Status Messages --- */
@@ -411,17 +434,18 @@
         }
     </style>
 </head>
+
 <body>
     <div class="upload-section">
         <h3>🎨 Kustomisasi Background Bagian Belakang</h3>
-        
+
         <div class="upload-grid">
             <div class="upload-item">
                 <label for="bgImage">📷 Upload Background Image:</label>
                 <input type="file" id="bgImage" accept="image/*" onchange="loadBackgroundImage(event)">
                 <small style="color: #666; display: block; margin-top: 5px;">Format: JPG, PNG, GIF</small>
             </div>
-            
+
             <div class="upload-item">
                 <label>🎨 Atau Pilih Warna Background:</label>
                 <input type="color" id="bgColorPicker" value="#f4c430" onchange="changeBackgroundColor(this.value)" style="width: 100%; height: 50px; border: none; border-radius: 8px; cursor: pointer;">
@@ -491,18 +515,18 @@
         <!-- Footer Section -->
         <div class="footer-section">
             <div class="office-name">
-               <?= $perpus_name?>
+                <?= $perpus_name ?>
             </div>
             <div class="office-address">
-               <?=$lokasi_perpustakaan ?>
+                <?= $lokasi_perpustakaan ?>
             </div>
         </div>
     </div>
 
     <div id="status"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous"></script>
 
     <script>
         let animationsEnabled = true;
@@ -511,7 +535,7 @@
             const statusDiv = document.getElementById('status');
             statusDiv.className = `status ${type}`;
             statusDiv.textContent = message;
-            
+
             setTimeout(() => {
                 statusDiv.textContent = '';
                 statusDiv.className = '';
@@ -574,12 +598,12 @@
             const color = document.getElementById('overlayColor').value;
             const opacity = document.getElementById('overlayOpacity').value / 100;
             const cardContainer = document.getElementById('libraryCardBack');
-            
+
             // Convert hex to rgba
             const r = parseInt(color.substr(1, 2), 16);
             const g = parseInt(color.substr(3, 2), 16);
             const b = parseInt(color.substr(5, 2), 16);
-            
+
             cardContainer.style.setProperty('--overlay-color', `rgba(${r}, ${g}, ${b}, ${opacity})`);
         }
 
@@ -608,19 +632,19 @@
         // Reset to Default
         function resetToDefault() {
             removeBackground();
-            
+
             // Reset text color
             document.getElementById('textColor').value = '#2c5530';
             changeTextColor('#2c5530');
-            
+
             // Clear file input
             document.getElementById('bgImage').value = '';
-            
+
             // Enable animations
             if (!animationsEnabled) {
                 toggleAnimations();
             }
-            
+
             showStatus('✅ Kartu bagian belakang berhasil direset ke default!');
         }
 
@@ -628,7 +652,7 @@
         function toggleAnimations() {
             const shapes = document.querySelectorAll('.decorative-shape');
             const btn = document.getElementById('animBtn');
-            
+
             if (animationsEnabled) {
                 shapes.forEach(shape => {
                     shape.style.animation = 'none';
@@ -652,11 +676,11 @@
                 const controls = document.querySelector('.controls');
                 const status = document.querySelector('#status');
                 const uploadSections = document.querySelectorAll('.upload-section');
-                
+
                 controls.style.display = 'none';
                 status.style.display = 'none';
                 uploadSections.forEach(section => section.style.display = 'none');
-                
+
                 const style = document.createElement('style');
                 style.textContent = `
                     @page {
@@ -681,16 +705,16 @@
                     }
                 `;
                 document.head.appendChild(style);
-                
+
                 window.print();
-                
+
                 setTimeout(() => {
                     controls.style.display = 'block';
                     status.style.display = 'block';
                     uploadSections.forEach(section => section.style.display = 'block');
                     document.head.removeChild(style);
                 }, 1000);
-                
+
                 showStatus('Dialog print telah dibuka. Pilih "Save as PDF" sebagai printer.');
             } catch (error) {
                 showStatus('Error saat membuka dialog print: ' + error.message, 'error');
@@ -727,7 +751,9 @@
 </body>
 </html>`;
 
-                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const blob = new Blob([htmlContent], {
+                    type: 'text/html'
+                });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
@@ -736,7 +762,7 @@
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
-                
+
                 showStatus('File HTML bagian belakang berhasil didownload!');
             } catch (error) {
                 showStatus('Error saat mendownload HTML: ' + error.message, 'error');
@@ -747,19 +773,19 @@
         async function generatePDFWithLibrary() {
             try {
                 showStatus('Sedang menggenerate PDF bagian belakang...', 'success');
-                
+
                 const element = document.getElementById('libraryCardBack');
-                
+
                 const controls = document.querySelector('.controls');
                 const status = document.querySelector('#status');
                 const uploadSections = document.querySelectorAll('.upload-section');
-                
+
                 controls.style.display = 'none';
                 status.style.display = 'none';
                 uploadSections.forEach(section => section.style.display = 'none');
-                
+
                 await new Promise(resolve => setTimeout(resolve, 100));
-                
+
                 const canvas = await html2canvas(element, {
                     scale: 2,
                     useCORS: true,
@@ -772,41 +798,43 @@
                     windowWidth: 1400,
                     windowHeight: 900
                 });
-                
+
                 controls.style.display = 'block';
                 status.style.display = 'block';
                 uploadSections.forEach(section => section.style.display = 'block');
-                
+
                 const imgData = canvas.toDataURL('image/png', 1.0);
-                
-                const { jsPDF } = window.jspdf;
-                
+
+                const {
+                    jsPDF
+                } = window.jspdf;
+
                 const originalWidth = 1004;
                 const originalHeight = 618;
                 const ratio = originalWidth / originalHeight;
-                
+
                 const cardWidthMM = 297;
                 const cardHeightMM = Math.round(cardWidthMM / ratio);
-                
+
                 const pdf = new jsPDF({
                     orientation: 'landscape',
                     unit: 'mm',
                     format: [cardWidthMM, cardHeightMM]
                 });
-                
+
                 pdf.addImage(imgData, 'PNG', 0, 0, cardWidthMM, cardHeightMM, '', 'FAST');
-                
+
                 pdf.save('kartu-anggota-perpustakaan-belakang-custom.pdf');
-                
+
                 showStatus('PDF bagian belakang berhasil digenerate dan didownload!');
-                
+
             } catch (error) {
                 showStatus('Error saat menggenerate PDF: ' + error.message, 'error');
                 console.error('PDF generation error:', error);
             }
         }
 
-      
+
         // Initialize
         window.addEventListener('load', function() {
             console.log('Card back with customization loaded successfully');
@@ -814,4 +842,5 @@
         });
     </script>
 </body>
+
 </html>

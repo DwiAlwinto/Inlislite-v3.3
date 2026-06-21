@@ -27,7 +27,7 @@ $slug = $request->getGet('slug') ?? '';
         /* Adjust the desired height */
     }
 </style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.css" integrity="sha512-rogivVAav89vN+wNObUwbrX9xIA8SxJBWMFu7jsHNlvo+fGevr0vACvMN+9Cog3LAQVFPlQPWEOYn8iGjBA71w==" crossorigin="anonymous">
 <?= $this->endSection('style'); ?>
 
 <?= $this->section('page'); ?>
@@ -68,7 +68,7 @@ $slug = $request->getGet('slug') ?? '';
             <!-- your_view.php -->
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="locationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Tambah 
+                    Tambah
                 </button>
                 <div class="dropdown-menu" aria-labelledby="locationDropdown">
                     <?php foreach ($CollectionCategorys  as $jenisbahan) : ?>
@@ -109,11 +109,11 @@ $slug = $request->getGet('slug') ?? '';
 
 <?= $this->section('script'); ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.js" integrity="sha512-iykXpucP/7ABKVLvIOWftHFtIpK2lJtVAZo+8GsAb9LBgCUa9Xn4bbpFi6EojHnF5y59tWSBpC+SIq2GH7v06A==" crossorigin="anonymous"></script>
 
 <script>
-    $(document).ready(function () {
-        $('.dropdown-item').click(function (e) {
+    $(document).ready(function() {
+        $('.dropdown-item').click(function(e) {
             e.preventDefault(); // Mencegah reload default <a href="#">
 
             var jenisbahanID = $(this).data('jenisbahan-id');
@@ -126,7 +126,7 @@ $slug = $request->getGet('slug') ?? '';
                     CollectionCategory_id: jenisbahanID,
                     JenisAnggota_id: jenisAnggota
                 },
-                success: function (response) {
+                success: function(response) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
@@ -135,7 +135,7 @@ $slug = $request->getGet('slug') ?? '';
                         location.reload(); // Refresh halaman setelah sukses
                     });
                 },
-                error: function (xhr, textStatus, errorThrown) {
+                error: function(xhr, textStatus, errorThrown) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',

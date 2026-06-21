@@ -25,7 +25,7 @@ $slug = $request->getGet('slug') ?? '';
         height: 25px;
     }
 </style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.css" integrity="sha512-rogivVAav89vN+wNObUwbrX9xIA8SxJBWMFu7jsHNlvo+fGevr0vACvMN+9Cog3LAQVFPlQPWEOYn8iGjBA71w==" crossorigin="anonymous">
 <?= $this->endSection('style'); ?>
 
 <?= $this->section('page'); ?>
@@ -104,13 +104,13 @@ $slug = $request->getGet('slug') ?? '';
 
 <?= $this->section('script'); ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.1/dist/sweetalert2.min.js" integrity="sha512-iykXpucP/7ABKVLvIOWftHFtIpK2lJtVAZo+8GsAb9LBgCUa9Xn4bbpFi6EojHnF5y59tWSBpC+SIq2GH7v06A==" crossorigin="anonymous"></script>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         // Event Listener untuk Dropdown
-        $('.dropdown-item').click(function (e) {
-            e.preventDefault(); 
+        $('.dropdown-item').click(function(e) {
+            e.preventDefault();
 
             // Ambil data ID Lokasi
             var locationID = $(this).data('location-id');
@@ -136,7 +136,7 @@ $slug = $request->getGet('slug') ?? '';
                     Location_Library_id: locationID,
                     JenisAnggota_id: jenisAnggota
                 },
-                success: function (response) {
+                success: function(response) {
                     // FIX: Cek flag success dari controller
                     if (response.success === true) {
                         Swal.fire({
@@ -155,7 +155,7 @@ $slug = $request->getGet('slug') ?? '';
                         });
                     }
                 },
-                error: function (xhr, textStatus, errorThrown) {
+                error: function(xhr, textStatus, errorThrown) {
                     console.error('Error:', xhr.responseText);
                     Swal.fire({
                         icon: 'error',

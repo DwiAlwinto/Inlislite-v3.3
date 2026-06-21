@@ -81,8 +81,13 @@ $member_id = $request->getGet('member_id') ?? 0;
     }
 
     @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 </style>
 <?= $this->endSection('style'); ?>
@@ -157,8 +162,8 @@ $member_id = $request->getGet('member_id') ?? 0;
 <?= $this->endSection('page'); ?>
 
 <?= $this->section('script'); ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js" integrity="sha512-jDEmOIskGs/j5S3wBWQAL4pOYy3S5a0y3Vav7BgXHnCVcUBXkf1OqzYS6njmDiKyqes22QEX8GSIZZ5pGk+9nA==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" integrity="sha512-TA1p+I1AtmUN2QnvpJT01/hjvxCxjyBfXtNuKNnvvwyCaQpdl5JUfiJ7geQtMnJ55myntTq5JwPLiH3j6e222A==" crossorigin="anonymous"></script>
 <script>
     function previewExcel(event) {
         const input = event.target;
@@ -197,11 +202,11 @@ $member_id = $request->getGet('member_id') ?? 0;
                 }
                 table += '</tr>';
             }
-            
+
             if (json.length > 11) {
                 table += '<tr><td colspan="' + numColumns + '" class="text-center"><em>... dan ' + (json.length - 11) + ' baris lainnya</em></td></tr>';
             }
-            
+
             table += '</tbody></table>';
 
             const wrappedTable = '<div class="table-responsive">' + table + '</div>';
@@ -213,10 +218,10 @@ $member_id = $request->getGet('member_id') ?? 0;
     // Handle form submit dengan AJAX
     document.getElementById('frm_import').addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
         const fileInput = document.getElementById('excel_file');
         const file = fileInput.files[0];
-        
+
         // Validasi file
         if (!file) {
             Swal.fire({
@@ -263,18 +268,18 @@ $member_id = $request->getGet('member_id') ?? 0;
 
         // Kirim via AJAX
         fetch('<?= base_url('anggota/import') ?>', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Hide loading
-            document.getElementById('loadingOverlay').classList.remove('active');
-            document.getElementById('btn_submit').disabled = false;
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide loading
+                document.getElementById('loadingOverlay').classList.remove('active');
+                document.getElementById('btn_submit').disabled = false;
 
-            if (data.success) {
-                // Tampilkan detail hasil import
-                let detailHtml = `
+                if (data.success) {
+                    // Tampilkan detail hasil import
+                    let detailHtml = `
                     <div class="text-left">
                         <p><strong>✅ Berhasil diimport:</strong> ${data.imported} data</p>
                         ${data.skipped > 0 ? `<p><strong>⚠️ Dilewati (duplikat):</strong> ${data.skipped} data</p>` : ''}
@@ -282,45 +287,45 @@ $member_id = $request->getGet('member_id') ?? 0;
                     </div>
                 `;
 
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Import Berhasil!',
-                    html: detailHtml,
-                    confirmButtonColor: '#28a745',
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redirect ke halaman daftar anggota
-                        
-                    }
-                });
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Import Berhasil!',
+                        html: detailHtml,
+                        confirmButtonColor: '#28a745',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redirect ke halaman daftar anggota
 
-                // Reset form dan preview
-                document.getElementById('frm_import').reset();
-                document.getElementById('preview').innerHTML = '';
+                        }
+                    });
 
-            } else {
+                    // Reset form dan preview
+                    document.getElementById('frm_import').reset();
+                    document.getElementById('preview').innerHTML = '';
+
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Import Gagal!',
+                        text: data.message || 'Terjadi kesalahan saat mengimport data.',
+                        confirmButtonColor: '#d33'
+                    });
+                }
+            })
+            .catch(error => {
+                // Hide loading
+                document.getElementById('loadingOverlay').classList.remove('active');
+                document.getElementById('btn_submit').disabled = false;
+
+                console.error('Error:', error);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Import Gagal!',
-                    text: data.message || 'Terjadi kesalahan saat mengimport data.',
+                    title: 'Terjadi Kesalahan!',
+                    text: 'Tidak dapat menghubungi server. Silakan coba lagi.',
                     confirmButtonColor: '#d33'
                 });
-            }
-        })
-        .catch(error => {
-            // Hide loading
-            document.getElementById('loadingOverlay').classList.remove('active');
-            document.getElementById('btn_submit').disabled = false;
-
-            console.error('Error:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Terjadi Kesalahan!',
-                text: 'Tidak dapat menghubungi server. Silakan coba lagi.',
-                confirmButtonColor: '#d33'
             });
-        });
     });
 </script>
 <?= $this->endSection('script'); ?>

@@ -5,7 +5,7 @@ $slug = $request->getGet('slug') ?? '';
 
 <?= $this->extend('App\Views\layout\main'); ?>
 <?= $this->section('style') ?>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" integrity="sha512-IScV5kvJo+TIPbxENerxZcEpu9VrLUGh1qYWv6Z9aylhxWE4k4Fch3CHl0IYYmN+jrnWQBPlpoTVoWfSMakoKA==" crossorigin="anonymous">
 
 <style>
 	.select2 {
@@ -417,7 +417,7 @@ $slug = $request->getGet('slug') ?? '';
 <?= $this->endSection('page') ?>
 
 <?= $this->section('script') ?>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js" integrity="sha512-zB7yJLSASiSevQmWCrQaq+z/f5zRIa884hwWgmK1oI3MfolIzKcpDtyfBsrGqUi/hMCObVwr/+SZTByOqh0zkQ==" crossorigin="anonymous"></script>
 <script>
 	$(document).ready(function() {
 		<?php if (session()->getFlashdata('swal_icon')) : ?>
