@@ -513,7 +513,7 @@
 							   name="NamaKetua" 
 							   id="NamaKetua" 
 							   placeholder="Masukkan nama penanggung jawab"
-							   value="<?= old('NamaKetua') ?>" 
+							   value="<?= htmlspecialchars(old('NamaKetua'), ENT_QUOTES, 'UTF-8') ?>" 
 							   required>
 						<?php if (session('errors.NamaKetua')) : ?>
 							<div class="invalid-feedback"><?= session('errors.NamaKetua') ?></div>
@@ -527,7 +527,7 @@
 							   name="NomerTelponKetua" 
 							   id="NomerTelponKetua" 
 							   placeholder="Contoh: 08123456789"
-							   value="<?= old('NomerTelponKetua') ?>" 
+							   value="<?= htmlspecialchars(old('NomerTelponKetua'), ENT_QUOTES, 'UTF-8') ?>" 
 							   required>
 						<?php if (session('errors.NomerTelponKetua')) : ?>
 							<div class="invalid-feedback"><?= session('errors.NomerTelponKetua') ?></div>
@@ -548,7 +548,7 @@
 							   name="AsalInstansi" 
 							   id="AsalInstansi" 
 							   placeholder="Masukkan nama instansi atau organisasi"
-							   value="<?= old('AsalInstansi') ?>" 
+							   value="<?= htmlspecialchars(old('AsalInstansi'), ENT_QUOTES, 'UTF-8') ?>" 
 							   required>
 						<?php if (session('errors.AsalInstansi')) : ?>
 							<div class="invalid-feedback"><?= session('errors.AsalInstansi') ?></div>
@@ -562,7 +562,7 @@
 							   name="EmailInstansi" 
 							   id="EmailInstansi" 
 							   placeholder="contoh@instansi.com"
-							   value="<?= old('EmailInstansi') ?>">
+							   value="<?= htmlspecialchars(old('EmailInstansi'), ENT_QUOTES, 'UTF-8') ?>">
 						<?php if (session('errors.EmailInstansi')) : ?>
 							<div class="invalid-feedback"><?= session('errors.EmailInstansi') ?></div>
 						<?php endif; ?>
@@ -575,7 +575,7 @@
 							  name="AlamatInstansi" 
 							  class="form-control <?= session('errors.AlamatInstansi') ? 'is-invalid' : '' ?>" 
 							  placeholder="Masukkan alamat lengkap instansi"
-							  rows="3"><?= old('AlamatInstansi') ?></textarea>
+							  rows="3"><?= htmlspecialchars(old('AlamatInstansi'), ENT_QUOTES, 'UTF-8') ?></textarea>
 					<?php if (session('errors.AlamatInstansi')) : ?>
 						<div class="invalid-feedback"><?= session('errors.AlamatInstansi') ?></div>
 					<?php endif; ?>
@@ -595,7 +595,7 @@
 							   name="CountPersonel" 
 							   id="CountPersonel" 
 							   placeholder="0"
-							   value="<?= old('CountPersonel', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountPersonel', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="1"
 							   required>
 						<?php if (session('errors.CountPersonel')) : ?>
@@ -610,7 +610,7 @@
 							   name="CountLaki" 
 							   id="CountLaki" 
 							   placeholder="0"
-							   value="<?= old('CountLaki', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountLaki', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -621,7 +621,7 @@
 							   name="CountPerempuan" 
 							   id="CountPerempuan" 
 							   placeholder="0"
-							   value="<?= old('CountPerempuan', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountPerempuan', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 				</div>
@@ -645,7 +645,7 @@
 							   name="CountPNS" 
 							   id="CountPNS" 
 							   placeholder="0"
-							   value="<?= old('CountPNS', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountPNS', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -656,7 +656,7 @@
 							   name="CountGuru" 
 							   id="CountGuru" 
 							   placeholder="0"
-							   value="<?= old('CountGuru', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountGuru', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -667,7 +667,7 @@
 							   name="CountPSwasta" 
 							   id="CountPSwasta" 
 							   placeholder="0"
-							   value="<?= old('CountPSwasta', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountPSwasta', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -678,7 +678,7 @@
 							   name="CountPeneliti" 
 							   id="CountPeneliti" 
 							   placeholder="0"
-							   value="<?= old('CountPeneliti', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountPeneliti', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -689,7 +689,7 @@
 							   name="CountDosen" 
 							   id="CountDosen" 
 							   placeholder="0"
-							   value="<?= old('CountDosen', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountDosen', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -700,7 +700,7 @@
 							   name="CountPensiunan" 
 							   id="CountPensiunan" 
 							   placeholder="0"
-							   value="<?= old('CountPensiunan', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountPensiunan', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -711,7 +711,7 @@
 							   name="CountTNI" 
 							   id="CountTNI" 
 							   placeholder="0"
-							   value="<?= old('CountTNI', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountTNI', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -722,7 +722,7 @@
 							   name="CountWiraswasta" 
 							   id="CountWiraswasta" 
 							   placeholder="0"
-							   value="<?= old('CountWiraswasta', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountWiraswasta', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -733,7 +733,7 @@
 							   name="CountPelajar" 
 							   id="CountPelajar" 
 							   placeholder="0"
-							   value="<?= old('CountPelajar', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountPelajar', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -744,7 +744,7 @@
 							   name="CountMahasiswa" 
 							   id="CountMahasiswa" 
 							   placeholder="0"
-							   value="<?= old('CountMahasiswa', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountMahasiswa', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -755,7 +755,7 @@
 							   name="CountLainnya" 
 							   id="CountLainnya" 
 							   placeholder="0"
-							   value="<?= old('CountLainnya', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountLainnya', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 				</div>
@@ -779,7 +779,7 @@
 							   name="CountSD" 
 							   id="CountSD" 
 							   placeholder="0"
-							   value="<?= old('CountSD', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountSD', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -790,7 +790,7 @@
 							   name="CountSMP" 
 							   id="CountSMP" 
 							   placeholder="0"
-							   value="<?= old('CountSMP', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountSMP', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -801,7 +801,7 @@
 							   name="CountSMA" 
 							   id="CountSMA" 
 							   placeholder="0"
-							   value="<?= old('CountSMA', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountSMA', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -812,7 +812,7 @@
 							   name="CountD1" 
 							   id="CountD1" 
 							   placeholder="0"
-							   value="<?= old('CountD1', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountD1', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -823,7 +823,7 @@
 							   name="CountD2" 
 							   id="CountD2" 
 							   placeholder="0"
-							   value="<?= old('CountD2', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountD2', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -834,7 +834,7 @@
 							   name="CountD3" 
 							   id="CountD3" 
 							   placeholder="0"
-							   value="<?= old('CountD3', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountD3', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -845,7 +845,7 @@
 							   name="CountS1" 
 							   id="CountS1" 
 							   placeholder="0"
-							   value="<?= old('CountS1', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountS1', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -856,7 +856,7 @@
 							   name="CountS2" 
 							   id="CountS2" 
 							   placeholder="0"
-							   value="<?= old('CountS2', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountS2', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 
@@ -867,7 +867,7 @@
 							   name="CountS3" 
 							   id="CountS3" 
 							   placeholder="0"
-							   value="<?= old('CountS3', 0) ?>" 
+							   value="<?= htmlspecialchars(old('CountS3', 0), ENT_QUOTES, 'UTF-8') ?>" 
 							   min="0">
 					</div>
 				</div>
@@ -891,7 +891,7 @@
 							   name="TeleponInstansi" 
 							   id="TeleponInstansi" 
 							   placeholder="Contoh: 021-1234567"
-							   value="<?= old('TeleponInstansi') ?>">
+							   value="<?= htmlspecialchars(old('TeleponInstansi'), ENT_QUOTES, 'UTF-8') ?>">
 						<?php if (session('errors.TeleponInstansi')) : ?>
 							<div class="invalid-feedback"><?= session('errors.TeleponInstansi') ?></div>
 						<?php endif; ?>
@@ -921,7 +921,7 @@
 							  name="Information" 
 							  class="form-control <?= session('errors.Information') ? 'is-invalid' : '' ?>" 
 							  placeholder="Masukkan keterangan atau catatan tambahan (opsional)"
-							  rows="3"><?= old('Information') ?></textarea>
+							  rows="3"><?= htmlspecialchars(old('Information'), ENT_QUOTES, 'UTF-8') ?></textarea>
 					<?php if (session('errors.Information')) : ?>
 						<div class="invalid-feedback"><?= session('errors.Information') ?></div>
 					<?php endif; ?>
