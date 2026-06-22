@@ -30,7 +30,8 @@ function write_cache($file, $content, $time = 0)
 		fwrite($fp, serialize($c));
 		flock($fp, LOCK_UN);
 		fclose($fp);
-		@chmod($file, 0777);
+		@chmod($file, 0644); // ✅ AMAN!
+		// @chmod($file, 0777);
 		return true;
 	} else {
 		return false;
@@ -176,16 +177,16 @@ function callPostAPI($uri_api, $form_params)
 }
 function callAuthAPI($username, $password)
 {
-	
+
 	try {
-		
+
 		$result = json_decode(service('curlrequest', ['verify' => false])->request("post", env('API_AUTH'), [
 			'form_params' => [
 				'username' => $username,
 				'password' => $password,
 			]
 		])->getBody());
-		
+
 		try {
 			$payload = JWT::decode($result->token, (new Key(getenv('security.TOKEN_SECRET'), getenv('security.TOKEN_ALG'))));
 			session()->set('username', $username);
@@ -247,15 +248,15 @@ function is_allowed($uri, $user_id = null)
 		return true;
 	}
 	// $uri = uri_string();   
-		
-		// Jika $uri tidak dikirim, ambil dari current request
+
+	// Jika $uri tidak dikirim, ambil dari current request
 	if ($uri === null) {
 		$uri = uri_string();
 	}
-	
+
 	$uri = str_replace('index.php/', '', $uri);
 	// dd($uri);
-	
+
 	$user_id = $user_id ?? login_id();
 
 	if (is_profiling()) {
@@ -496,18 +497,18 @@ function set_setting_parameter($paramName, $paramValue)
 	$builder = new DataModel($tableName);
 	$query = $builder->where('Name', $paramName);
 
-	
+
 	$param = $query->get()->getRow();
 
 	if (empty($param)) {
 		$save_data = array('Name' => $paramName, 'Value' => $paramValue);
-		
+
 		$builder->insert($save_data);
 
 		return true;
 	} else {
 		$update_data = array('Name' => $paramName, 'Value' => $paramValue);
-	
+
 		$builder->update($param->ID, $update_data);
 		return true;
 	}

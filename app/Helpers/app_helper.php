@@ -1,4 +1,5 @@
 <?php
+
 use Myth\Auth\Config\Services as MythServices;
 
 if (!function_exists('get_username')) {
@@ -155,7 +156,7 @@ if (!function_exists('unslugify')) {
 if (!function_exists('get_unique_id')) {
     function get_unique_id()
     {
-        return rand(100000000, 999999999) . uniqid();
+        return random_int(100000000, 999999999) . uniqid();
     }
 }
 
@@ -1034,18 +1035,38 @@ if (!function_exists('is_dir_empty')) {
     }
 }
 
+// if (!function_exists('generate_key')) {
+//     function generate_key($length = 40, $type = 'alnum')
+//     {
+//         // $salt = base_convert(bin2hex(random_string($type, 64)), 16, 36);
+//         $salt = random_string($type, 64);
+//         if ($salt === false) {
+//             $salt = hash('sha256', time() . mt_rand());
+//         }
+
+//         $new_key = substr($salt, 0, $length);
+
+//         return $new_key;
+//     }
+// }
+
 if (!function_exists('generate_key')) {
     function generate_key($length = 40, $type = 'alnum')
     {
-        // $salt = base_convert(bin2hex(random_string($type, 64)), 16, 36);
-        $salt = random_string($type, 64);
-        if ($salt === false) {
-            $salt = hash('sha256', time() . mt_rand());
+        // ✅ CARA PALING AMAN: Gunakan random_bytes()
+        try {
+            // Generate random bytes secara cryptographically secure
+            $bytes = random_bytes(ceil($length / 2));
+            $salt = bin2hex($bytes);
+
+            // Return key dengan panjang yang diminta
+            return substr($salt, 0, $length);
+        } catch (Exception $e) {
+            // Fallback jika random_bytes gagal (sangat jarang)
+            // Tetap gunakan random_int() yang aman
+            $salt = hash('sha256', microtime() . random_int(1000000000, 9999999999));
+            return substr($salt, 0, $length);
         }
-
-        $new_key = substr($salt, 0, $length);
-
-        return $new_key;
     }
 }
 
@@ -1126,7 +1147,7 @@ if (!function_exists('checkAuthorization')) {
     {
         // Profiling Mode → Permission menggunakan session auth_permissions
         if (function_exists('is_profiling') && is_profiling()) {
-            
+
             $auth_permissions = (array) session()->get('auth_permissions');
             $terpilih = [];
 
