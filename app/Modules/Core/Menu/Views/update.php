@@ -26,14 +26,14 @@ if (!($menus = read_cache('list_menu_menus'))) {
 	write_cache('list_menu_categories', $menus);
 }
 
-if (!($category = read_cache($cacheName = 'list_menu_category_' . md5($slug)))) {
+if (!($category = read_cache($cacheName = 'list_menu_category_' . hash('sha256', $slug)))) {
 	$baseModel = new \Base\Models\BaseModel();
 	$baseModel->setTable('c_categories');
 	$category  = $baseModel
 		->select('c_categories.*')
 		->where('slug', $slug)
 		->first();
-	write_cache($cacheName, $categories);
+	write_cache($cacheName, $category);
 }
 ?>
 

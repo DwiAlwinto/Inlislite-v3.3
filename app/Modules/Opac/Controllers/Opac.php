@@ -41,134 +41,67 @@ class Opac extends \Base\Controllers\BaseController
     }
 
 
-   public function index()
-{
-    $startTime = microtime(true);
-    $this->data['title'] = 'OPAC - Online Public Access Catalog';
+    public function index()
+    {
+        $startTime = microtime(true);
+        $this->data['title'] = 'OPAC - Online Public Access Catalog';
 
-    // ✅ Validasi member_no
-    $memberNo = $this->request->getVar('member_no') ?? '';
-    if (!empty($memberNo) && !preg_match('/^[a-zA-Z0-9\-]{0,50}$/', $memberNo)) {
-        $memberNo = '';
-    }
-    $memberNo = esc($memberNo);
-
-    if ($memberNo) {
-        try {
-            $result = $this->calculateRecommendations($memberNo);
-
-            $this->data['member_no']      = $memberNo;
-            $this->data['recommendations'] = $result['recommendations'];
-            $this->data['is_cold_start']   = $result['is_cold_start'];
-            $this->data['catalogs']        = [];
-            $this->data['pager']           = null;
-            $this->data['search']          = null;
-            $this->data['search_by']       = null;
-            $this->data['total_records']   = 0;
-
-        } catch (\Exception $e) {
-            $this->data['member_no']          = $memberNo;
-            $this->data['recommendations']    = [];
-            $this->data['metrics']            = null;
-            $this->data['is_cold_start']      = true;
-            $this->data['recommendation_error'] = esc($e->getMessage()); // ✅ escape error message
-            $this->loadRegularCatalogs();
+        // ✅ Validasi member_no
+        $memberNo = $this->request->getVar('member_no') ?? '';
+        if (!empty($memberNo) && !preg_match('/^[a-zA-Z0-9\-]{0,50}$/', $memberNo)) {
+            $memberNo = '';
         }
-    } else {
-        $is_opac_cache = env('is_opac_cache', 0);
-        if ($is_opac_cache == 1) {
-            $this->loadRegularCatalogscache();
+        $memberNo = esc($memberNo);
+
+        if ($memberNo) {
+            try {
+                $result = $this->calculateRecommendations($memberNo);
+
+                $this->data['member_no']      = $memberNo;
+                $this->data['recommendations'] = $result['recommendations'];
+                $this->data['is_cold_start']   = $result['is_cold_start'];
+                $this->data['catalogs']        = [];
+                $this->data['pager']           = null;
+                $this->data['search']          = null;
+                $this->data['search_by']       = null;
+                $this->data['total_records']   = 0;
+            } catch (\Exception $e) {
+                $this->data['member_no']          = $memberNo;
+                $this->data['recommendations']    = [];
+                $this->data['metrics']            = null;
+                $this->data['is_cold_start']      = true;
+                $this->data['recommendation_error'] = esc($e->getMessage()); // ✅ escape error message
+                $this->loadRegularCatalogs();
+            }
         } else {
-            $this->loadRegularCatalogs();
-        }
-    }
-
-    $this->data['opac_banners'] = $this->getOpacBanners();
-    $endTime = microtime(true);
-    $this->data['execution_time'] = $endTime - $startTime;
-    return view('Opac\Views\index', $this->data);
-}
-
-private function getOpacBanners()
-{
-    try {
-        return $this->bannerModel->where('active', 1)->where('category', 'Opac')->orderBy('sort', 'ASC')->findAll();
-    } catch (\Exception $e) {
-        return [];
-    }
-}
-
-private function loadRegularCatalogs()
-{
-    $perPage     = 12;
-    $currentPage = $this->request->getVar('page') ?? 1;
-
-    $builder = $this->katalogModel->select('catalogs.*')->orderBy("ID", "DESC");
-
-    $search = sanitizeSearch($this->request->getVar('search'));
-
-    if ($search) {
-        $rawSearch = $this->request->getVar('search');
-        $searchBy  = sanitizeSearch($this->request->getVar('search_by') ?? 'Title');
-        $this->applyFulltextSearch($builder, $search, $searchBy, $rawSearch);
-    }
-
-    $additionalFilters = ['Publisher', 'Author', 'PublishLocation', 'Subject', 'PublishYear'];
-    foreach ($additionalFilters as $filter) {
-        $value = $this->request->getVar($filter);
-        if (!empty($value)) {
-            if ($filter === 'Author') {
-                $authors = array_filter(array_map('trim', preg_split('/[;,]+/', $value)));
-                foreach ($authors as $author) {
-                    $builder->orLike('Author', sanitizeSearch($author));
-                }
+            $is_opac_cache = env('is_opac_cache', 0);
+            if ($is_opac_cache == 1) {
+                $this->loadRegularCatalogscache();
             } else {
-                $builder->like($filter, sanitizeSearch($value));
+                $this->loadRegularCatalogs();
             }
         }
+
+        $this->data['opac_banners'] = $this->getOpacBanners();
+        $endTime = microtime(true);
+        $this->data['execution_time'] = $endTime - $startTime;
+        return view('Opac\Views\index', $this->data);
     }
 
-    $catalogs = $builder->paginate($perPage, 'default', $currentPage);
-    $pager    = $this->katalogModel->pager;
+    private function getOpacBanners()
+    {
+        try {
+            return $this->bannerModel->where('active', 1)->where('category', 'Opac')->orderBy('sort', 'ASC')->findAll();
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
 
-    $this->data['pager']         = $pager;
-    $this->data['catalogs']      = $catalogs;
-    $this->data['total_records'] = $pager->getTotal();
+    private function loadRegularCatalogs()
+    {
+        $perPage     = 12;
+        $currentPage = $this->request->getVar('page') ?? 1;
 
-    $this->data['publisher_counts']       = array_count_values(array_map(fn($p) => rtrim(trim($p), ','), array_column($catalogs, 'Publisher')));
-    $this->data['author_counts']          = array_count_values(array_map(fn($a) => rtrim(trim($a), ','), array_column($catalogs, 'Author')));
-    $this->data['publish_location_counts'] = array_count_values(array_map(fn($l) => rtrim(trim($l), ','), array_column($catalogs, 'PublishLocation')));
-    $this->data['subject_counts']         = array_count_values(array_map(fn($s) => rtrim(trim($s), ','), array_column($catalogs, 'Subject')));
-    $this->data['year_counts']            = array_count_values(array_map(fn($d) => date('Y', strtotime($d)), array_column($catalogs, 'EndDate')));
-
-    $this->data['search']    = esc($this->request->getVar('search') ?? '');
-    $allowedSearchBy         = ['Title', 'Author', 'Subject', 'Publisher', 'ISBN'];
-    $searchBy                = $this->request->getVar('search_by') ?? 'Title';
-    $this->data['search_by'] = in_array($searchBy, $allowedSearchBy) ? $searchBy : 'Title';
-}
-
-private function loadRegularCatalogscache()
-{
-    $cacheTTL    = 3600;
-    $perPage     = 12;
-    $currentPage = $this->request->getVar('page') ?? 1;
-
-    $requestParams = $this->request->getGet();
-    ksort($requestParams);
-    $cacheKey = 'catalog_data_' . md5(http_build_query($requestParams));
-
-    if ($cachedData = cache($cacheKey)) {
-        // ========== CACHE HIT ==========
-        $this->data   = array_merge($this->data, $cachedData);
-        $totalRecords = $cachedData['total_records'];
-
-        // ✅ Buat pager HTML string dengan custom template
-        $pager = service('pager');
-        $pager->setPath('/opac', 'default');
-        $this->data['pager'] = $pager->makeLinks($currentPage, $perPage, $totalRecords, 'opac_pagination');
-
-    } else {
-        // ========== CACHE MISS ==========
         $builder = $this->katalogModel->select('catalogs.*')->orderBy("ID", "DESC");
 
         $search = sanitizeSearch($this->request->getVar('search'));
@@ -194,35 +127,104 @@ private function loadRegularCatalogscache()
             }
         }
 
-        $catalogs     = $builder->paginate($perPage, 'default', $currentPage);
-        $pager        = $this->katalogModel->pager;
-        $totalRecords = $pager->getTotal();
+        $catalogs = $builder->paginate($perPage, 'default', $currentPage);
+        $pager    = $this->katalogModel->pager;
 
-        // ✅ Simpan pager sebagai OBJEK untuk cache miss
         $this->data['pager']         = $pager;
         $this->data['catalogs']      = $catalogs;
-        $this->data['total_records'] = $totalRecords;
+        $this->data['total_records'] = $pager->getTotal();
 
-        $dataToCache = [
-            'total_records'          => $totalRecords,
-            'catalogs'               => $catalogs,
-            'publisher_counts'       => array_count_values(array_map(fn($p) => rtrim(trim($p), ','), array_column($catalogs, 'Publisher'))),
-            'author_counts'          => array_count_values(array_map(fn($a) => rtrim(trim($a), ','), array_column($catalogs, 'Author'))),
-            'publish_location_counts' => array_count_values(array_map(fn($l) => rtrim(trim($l), ','), array_column($catalogs, 'PublishLocation'))),
-            'subject_counts'         => array_count_values(array_map(fn($s) => rtrim(trim($s), ','), array_column($catalogs, 'Subject'))),
-            'year_counts'            => array_count_values(array_map(fn($d) => date('Y', strtotime($d)), array_column($catalogs, 'EndDate'))),
-        ];
+        $this->data['publisher_counts']       = array_count_values(array_map(fn($p) => rtrim(trim($p), ','), array_column($catalogs, 'Publisher')));
+        $this->data['author_counts']          = array_count_values(array_map(fn($a) => rtrim(trim($a), ','), array_column($catalogs, 'Author')));
+        $this->data['publish_location_counts'] = array_count_values(array_map(fn($l) => rtrim(trim($l), ','), array_column($catalogs, 'PublishLocation')));
+        $this->data['subject_counts']         = array_count_values(array_map(fn($s) => rtrim(trim($s), ','), array_column($catalogs, 'Subject')));
+        $this->data['year_counts']            = array_count_values(array_map(fn($d) => date('Y', strtotime($d)), array_column($catalogs, 'EndDate')));
 
-        cache()->save($cacheKey, $dataToCache, $cacheTTL);
-        $this->data = array_merge($this->data, $dataToCache);
+        $this->data['search']    = esc($this->request->getVar('search') ?? '');
+        $allowedSearchBy         = ['Title', 'Author', 'Subject', 'Publisher', 'ISBN'];
+        $searchBy                = $this->request->getVar('search_by') ?? 'Title';
+        $this->data['search_by'] = in_array($searchBy, $allowedSearchBy) ? $searchBy : 'Title';
     }
 
-    $this->data['search']    = esc($this->request->getVar('search') ?? '');
-    $allowedSearchBy         = ['Title', 'Author', 'Subject', 'Publisher', 'ISBN'];
-    $searchBy                = $this->request->getVar('search_by') ?? 'Title';
-    $this->data['search_by'] = in_array($searchBy, $allowedSearchBy) ? $searchBy : 'Title';
-}
- 
+    private function loadRegularCatalogscache()
+    {
+        $cacheTTL    = 3600;
+        $perPage     = 12;
+        $currentPage = $this->request->getVar('page') ?? 1;
+
+        $requestParams = $this->request->getGet();
+        ksort($requestParams);
+        // Sebelum (warning)
+        // $cacheKey = 'catalog_data_' . md5(http_build_query($requestParams));
+
+        // Sesudah (aman dari warning)
+        $cacheKey = 'catalog_data_' . hash('sha256', http_build_query($requestParams));
+
+        if ($cachedData = cache($cacheKey)) {
+            // ========== CACHE HIT ==========
+            $this->data   = array_merge($this->data, $cachedData);
+            $totalRecords = $cachedData['total_records'];
+
+            // ✅ Buat pager HTML string dengan custom template
+            $pager = service('pager');
+            $pager->setPath('/opac', 'default');
+            $this->data['pager'] = $pager->makeLinks($currentPage, $perPage, $totalRecords, 'opac_pagination');
+        } else {
+            // ========== CACHE MISS ==========
+            $builder = $this->katalogModel->select('catalogs.*')->orderBy("ID", "DESC");
+
+            $search = sanitizeSearch($this->request->getVar('search'));
+
+            if ($search) {
+                $rawSearch = $this->request->getVar('search');
+                $searchBy  = sanitizeSearch($this->request->getVar('search_by') ?? 'Title');
+                $this->applyFulltextSearch($builder, $search, $searchBy, $rawSearch);
+            }
+
+            $additionalFilters = ['Publisher', 'Author', 'PublishLocation', 'Subject', 'PublishYear'];
+            foreach ($additionalFilters as $filter) {
+                $value = $this->request->getVar($filter);
+                if (!empty($value)) {
+                    if ($filter === 'Author') {
+                        $authors = array_filter(array_map('trim', preg_split('/[;,]+/', $value)));
+                        foreach ($authors as $author) {
+                            $builder->orLike('Author', sanitizeSearch($author));
+                        }
+                    } else {
+                        $builder->like($filter, sanitizeSearch($value));
+                    }
+                }
+            }
+
+            $catalogs     = $builder->paginate($perPage, 'default', $currentPage);
+            $pager        = $this->katalogModel->pager;
+            $totalRecords = $pager->getTotal();
+
+            // ✅ Simpan pager sebagai OBJEK untuk cache miss
+            $this->data['pager']         = $pager;
+            $this->data['catalogs']      = $catalogs;
+            $this->data['total_records'] = $totalRecords;
+
+            $dataToCache = [
+                'total_records'          => $totalRecords,
+                'catalogs'               => $catalogs,
+                'publisher_counts'       => array_count_values(array_map(fn($p) => rtrim(trim($p), ','), array_column($catalogs, 'Publisher'))),
+                'author_counts'          => array_count_values(array_map(fn($a) => rtrim(trim($a), ','), array_column($catalogs, 'Author'))),
+                'publish_location_counts' => array_count_values(array_map(fn($l) => rtrim(trim($l), ','), array_column($catalogs, 'PublishLocation'))),
+                'subject_counts'         => array_count_values(array_map(fn($s) => rtrim(trim($s), ','), array_column($catalogs, 'Subject'))),
+                'year_counts'            => array_count_values(array_map(fn($d) => date('Y', strtotime($d)), array_column($catalogs, 'EndDate'))),
+            ];
+
+            cache()->save($cacheKey, $dataToCache, $cacheTTL);
+            $this->data = array_merge($this->data, $dataToCache);
+        }
+
+        $this->data['search']    = esc($this->request->getVar('search') ?? '');
+        $allowedSearchBy         = ['Title', 'Author', 'Subject', 'Publisher', 'ISBN'];
+        $searchBy                = $this->request->getVar('search_by') ?? 'Title';
+        $this->data['search_by'] = in_array($searchBy, $allowedSearchBy) ? $searchBy : 'Title';
+    }
+
 
     public function detail($id)
     {
@@ -327,22 +329,22 @@ private function loadRegularCatalogscache()
             if ($searchData['title']) {
                 $term = $this->toFtTerm($searchData['title']);
                 $term ? $builder->where("MATCH(Title) AGAINST ('{$term}' IN BOOLEAN MODE)", null, false)
-                      : $builder->like('Title', $searchData['title']);
+                    : $builder->like('Title', $searchData['title']);
             }
             if ($searchData['author']) {
                 $term = $this->toFtTerm($searchData['author']);
                 $term ? $builder->where("MATCH(Author) AGAINST ('{$term}' IN BOOLEAN MODE)", null, false)
-                      : $builder->like('Author', $searchData['author']);
+                    : $builder->like('Author', $searchData['author']);
             }
             if ($searchData['subject']) {
                 $term = $this->toFtTerm($searchData['subject']);
                 $term ? $builder->where("MATCH(Subject) AGAINST ('{$term}' IN BOOLEAN MODE)", null, false)
-                      : $builder->like('Subject', $searchData['subject']);
+                    : $builder->like('Subject', $searchData['subject']);
             }
             if ($searchData['publisher']) {
                 $term = $this->toFtTerm($searchData['publisher']);
                 $term ? $builder->where("MATCH(Publisher) AGAINST ('{$term}' IN BOOLEAN MODE)", null, false)
-                      : $builder->like('Publisher', $searchData['publisher']);
+                    : $builder->like('Publisher', $searchData['publisher']);
             }
             if ($searchData['isbn']) {
                 $builder->like('ISBN', $searchData['isbn']);
@@ -369,68 +371,68 @@ private function loadRegularCatalogscache()
         return view('Opac\Views\search', $this->data);
     }
 
-public function browse()
-{
-    $this->data['title'] = 'Browse Katalog';
+    public function browse()
+    {
+        $this->data['title'] = 'Browse Katalog';
 
-    $allowedTypes = ['author', 'title', 'subject'];
-    $browseType   = $this->request->getVar('type') ?? 'author';
-    $browseType   = in_array($browseType, $allowedTypes) ? $browseType : 'author';
+        $allowedTypes = ['author', 'title', 'subject'];
+        $browseType   = $this->request->getVar('type') ?? 'author';
+        $browseType   = in_array($browseType, $allowedTypes) ? $browseType : 'author';
 
-    $letter = $this->request->getVar('letter') ?? 'A';
-    $letter = preg_match('/^[A-Za-z0-9]$/', $letter) ? strtoupper($letter) : 'A';
+        $letter = $this->request->getVar('letter') ?? 'A';
+        $letter = preg_match('/^[A-Za-z0-9]$/', $letter) ? strtoupper($letter) : 'A';
 
-    // Statistik
-    $this->data['total_authors'] = $this->katalogModel
-        ->where('Author !=', '')
-        ->countAllResults(false);
-    $this->katalogModel->resetQuery();
+        // Statistik
+        $this->data['total_authors'] = $this->katalogModel
+            ->where('Author !=', '')
+            ->countAllResults(false);
+        $this->katalogModel->resetQuery();
 
-    $this->data['total_titles'] = $this->katalogModel
-        ->countAllResults(false);
-    $this->katalogModel->resetQuery();
+        $this->data['total_titles'] = $this->katalogModel
+            ->countAllResults(false);
+        $this->katalogModel->resetQuery();
 
-    $this->data['total_subjects'] = $this->katalogModel
-        ->where('Subject !=', '')
-        ->countAllResults(false);
-    $this->katalogModel->resetQuery();
+        $this->data['total_subjects'] = $this->katalogModel
+            ->where('Subject !=', '')
+            ->countAllResults(false);
+        $this->katalogModel->resetQuery();
 
-    $this->data['total_languages'] = $this->katalogModel
-        ->select('Languages')
-        ->where('Languages !=', '')
-        ->groupBy('Languages')
-        ->countAllResults(false);
-    $this->katalogModel->resetQuery();
+        $this->data['total_languages'] = $this->katalogModel
+            ->select('Languages')
+            ->where('Languages !=', '')
+            ->groupBy('Languages')
+            ->countAllResults(false);
+        $this->katalogModel->resetQuery();
 
-    // Pagination
-    $perPage     = 12;
-    $currentPage = (int) ($this->request->getVar('page_browse') ?? 1);
+        // Pagination
+        $perPage     = 12;
+        $currentPage = (int) ($this->request->getVar('page_browse') ?? 1);
 
-    // ✅ Perbaiki: hapus '%' manual, cukup pakai parameter 'after'
-    switch ($browseType) {
-        case 'author':
-            $this->katalogModel->like('Author', $letter, 'after')
-                               ->orderBy('Author', 'ASC');
-            break;
-        case 'title':
-            $this->katalogModel->like('Title', $letter, 'after')
-                               ->orderBy('Title', 'ASC');
-            break;
-        case 'subject':
-            $this->katalogModel->like('Subject', $letter, 'after')
-                               ->orderBy('Subject', 'ASC');
-            break;
+        // ✅ Perbaiki: hapus '%' manual, cukup pakai parameter 'after'
+        switch ($browseType) {
+            case 'author':
+                $this->katalogModel->like('Author', $letter, 'after')
+                    ->orderBy('Author', 'ASC');
+                break;
+            case 'title':
+                $this->katalogModel->like('Title', $letter, 'after')
+                    ->orderBy('Title', 'ASC');
+                break;
+            case 'subject':
+                $this->katalogModel->like('Subject', $letter, 'after')
+                    ->orderBy('Subject', 'ASC');
+                break;
+        }
+
+        $this->data['catalogs']    = $this->katalogModel->paginate($perPage, 'browse', $currentPage);
+        $this->data['pager']       = $this->katalogModel->pager;
+        $this->data['perPage']     = $perPage;
+        $this->data['browse_type'] = esc($browseType);
+        $this->data['letter']      = esc($letter);
+        $this->data['alphabet']    = range('A', 'Z');
+
+        return view('Opac\Views\browse', $this->data);
     }
-
-    $this->data['catalogs']    = $this->katalogModel->paginate($perPage, 'browse', $currentPage);
-    $this->data['pager']       = $this->katalogModel->pager;
-    $this->data['perPage']     = $perPage;
-    $this->data['browse_type'] = esc($browseType);
-    $this->data['letter']      = esc($letter);
-    $this->data['alphabet']    = range('A', 'Z');
-
-    return view('Opac\Views\browse', $this->data);
-}
 
     public function export()
     {
@@ -575,11 +577,11 @@ public function browse()
 
         // Katalog per tahun
         $this->data['by_year'] = $this->katalogModel
-        ->select('PublishYear, COUNT(*) as total')
-        ->where("PublishYear REGEXP '^[0-9]{4}$'")
-        ->groupBy('PublishYear')
-        ->orderBy('PublishYear', 'DESC')
-        ->findAll();
+            ->select('PublishYear, COUNT(*) as total')
+            ->where("PublishYear REGEXP '^[0-9]{4}$'")
+            ->groupBy('PublishYear')
+            ->orderBy('PublishYear', 'DESC')
+            ->findAll();
 
 
         // Katalog per bahasa
@@ -670,8 +672,8 @@ public function browse()
             ORDER BY total DESC
             LIMIT 10
         ")->getResult();
-    
-       
+
+
 
         // 7. Registrasi anggota per bulan (12 bulan terakhir)
         $this->data['by_month'] = $this->db->query("
@@ -818,18 +820,18 @@ public function browse()
             ->where('YEAR(RegisterDate)', date('Y') - 1)
             ->countAllResults();
 
-        $this->data['growth_rate'] = $lastYearMembers > 0 
-            ? (($currentYearMembers - $lastYearMembers) / $lastYearMembers) * 100 
+        $this->data['growth_rate'] = $lastYearMembers > 0
+            ? (($currentYearMembers - $lastYearMembers) / $lastYearMembers) * 100
             : 0;
 
         return view('Opac\Views\statistics_anggota', $this->data);
-    }  
+    }
 
-        // Anggota peminjam per jenis kelamin
+    // Anggota peminjam per jenis kelamin
 
 
-  
-   private function calculateRecommendations($memberNo)
+
+    private function calculateRecommendations($memberNo)
     {
         // Get loan data with catalog information
         $loanQuery = "
@@ -838,7 +840,7 @@ public function browse()
             JOIN collections c ON cl.Collection_id = c.ID
             JOIN catalogs cat ON c.Catalog_id = cat.ID
         ";
-        
+
         $loanData = $this->db->query($loanQuery)->getResultArray();
 
         // Check if member exists
@@ -853,7 +855,7 @@ public function browse()
         $memberId = $member->ID;
 
         // Get user's loan history
-        $userLoans = array_filter($loanData, function($loan) use ($memberId) {
+        $userLoans = array_filter($loanData, function ($loan) use ($memberId) {
             return $loan['member_id'] == $memberId;
         });
 
@@ -881,7 +883,7 @@ public function browse()
         // Calculate evaluation metrics
         $userBooks = array_column($userLoans, 'Catalog_id');
         $recommendedBooks = array_column($recommendations, 'ID');
-        
+
         $metrics = $this->calculateMetrics($userBooks, $recommendedBooks);
 
         return [
@@ -910,7 +912,7 @@ public function browse()
             ORDER BY LoanCount DESC
             LIMIT ?
         ";
-        
+
         return $this->db->query($query, [$limit])->getResultArray();
     }
 
@@ -920,22 +922,22 @@ public function browse()
     private function createPivotTable($loanData)
     {
         $pivotTable = [];
-        
+
         foreach ($loanData as $loan) {
             $memberId = $loan['member_id'];
             $catalogId = $loan['Catalog_id'];
-            
+
             if (!isset($pivotTable[$memberId])) {
                 $pivotTable[$memberId] = [];
             }
-            
+
             if (!isset($pivotTable[$memberId][$catalogId])) {
                 $pivotTable[$memberId][$catalogId] = 0;
             }
-            
+
             $pivotTable[$memberId][$catalogId]++;
         }
-        
+
         return $pivotTable;
     }
 
@@ -946,38 +948,38 @@ public function browse()
     {
         $memberIds = array_keys($pivotTable);
         $allCatalogIds = [];
-        
+
         // Get all unique catalog IDs
         foreach ($pivotTable as $memberData) {
             $allCatalogIds = array_merge($allCatalogIds, array_keys($memberData));
         }
         $allCatalogIds = array_unique($allCatalogIds);
-        
+
         $similarity = [];
-        
+
         foreach ($memberIds as $memberId1) {
             $similarity[$memberId1] = [];
-            
+
             foreach ($memberIds as $memberId2) {
                 if ($memberId1 == $memberId2) {
                     $similarity[$memberId1][$memberId2] = 1.0;
                     continue;
                 }
-                
+
                 // Create vectors for both members
                 $vector1 = [];
                 $vector2 = [];
-                
+
                 foreach ($allCatalogIds as $catalogId) {
                     $vector1[] = $pivotTable[$memberId1][$catalogId] ?? 0;
                     $vector2[] = $pivotTable[$memberId2][$catalogId] ?? 0;
                 }
-                
+
                 // Calculate cosine similarity
                 $similarity[$memberId1][$memberId2] = $this->cosineSimilarity($vector1, $vector2);
             }
         }
-        
+
         return $similarity;
     }
 
@@ -989,20 +991,20 @@ public function browse()
         $dotProduct = 0;
         $magnitude1 = 0;
         $magnitude2 = 0;
-        
+
         for ($i = 0; $i < count($vector1); $i++) {
             $dotProduct += $vector1[$i] * $vector2[$i];
             $magnitude1 += $vector1[$i] * $vector1[$i];
             $magnitude2 += $vector2[$i] * $vector2[$i];
         }
-        
+
         $magnitude1 = sqrt($magnitude1);
         $magnitude2 = sqrt($magnitude2);
-        
+
         if ($magnitude1 == 0 || $magnitude2 == 0) {
             return 0;
         }
-        
+
         return $dotProduct / ($magnitude1 * $magnitude2);
     }
 
@@ -1014,12 +1016,12 @@ public function browse()
         if (!isset($similarityMatrix[$memberId])) {
             return [];
         }
-        
+
         $similarities = $similarityMatrix[$memberId];
         unset($similarities[$memberId]); // Remove self
-        
+
         arsort($similarities);
-        
+
         return array_slice(array_keys($similarities), 0, $limit, true);
     }
 
@@ -1030,7 +1032,7 @@ public function browse()
     {
         // Count books borrowed by similar members
         $bookCounts = [];
-        
+
         foreach ($loanData as $loan) {
             if (in_array($loan['member_id'], $similarMembers)) {
                 $catalogId = $loan['Catalog_id'];
@@ -1040,17 +1042,17 @@ public function browse()
                 $bookCounts[$catalogId]++;
             }
         }
-        
+
         // Sort by count
         arsort($bookCounts);
-        
+
         // Get top books
         $topBookIds = array_slice(array_keys($bookCounts), 0, $limit);
-        
+
         if (empty($topBookIds)) {
             return [];
         }
-        
+
         // Get complete book details from catalogs table
         $placeholders = str_repeat('?,', count($topBookIds) - 1) . '?';
         $query = "
@@ -1060,9 +1062,9 @@ public function browse()
             FROM catalogs 
             WHERE ID IN ($placeholders)
         ";
-        
+
         $results = $this->db->query($query, $topBookIds)->getResultArray();
-        
+
         // Maintain the order based on recommendation score
         $orderedResults = [];
         foreach ($topBookIds as $bookId) {
@@ -1073,7 +1075,7 @@ public function browse()
                 }
             }
         }
-        
+
         return $orderedResults;
     }
 
@@ -1084,22 +1086,22 @@ public function browse()
     {
         $userBooksSet = array_flip($userBooks);
         $recommendedBooksSet = array_flip($recommendedBooks);
-        
+
         // Find intersection (relevant recommended books)
         $relevantRecommended = array_intersect_key($recommendedBooksSet, $userBooksSet);
-        
+
         // Precision = relevant recommended / total recommended
         $precision = count($recommendedBooks) > 0 ? count($relevantRecommended) / count($recommendedBooks) : 0.0;
-        
+
         // Recall = relevant recommended / total relevant
         $recall = count($userBooks) > 0 ? count($relevantRecommended) / count($userBooks) : 0.0;
-        
+
         // Accuracy (same as recall in this context)
         $accuracy = $recall;
-        
+
         // NDCG calculation
         $ndcg = $this->calculateNDCG($userBooks, $recommendedBooks);
-        
+
         return [
             'precision' => round($precision, 4),
             'recall' => round($recall, 4),
@@ -1114,31 +1116,31 @@ public function browse()
     private function calculateNDCG($userBooks, $recommendedBooks)
     {
         $userBooksSet = array_flip($userBooks);
-        
+
         // Create relevance scores for recommended books
         $relevanceScores = [];
         foreach ($recommendedBooks as $bookId) {
             $relevanceScores[] = isset($userBooksSet[$bookId]) ? 1 : 0;
         }
-        
+
         // Calculate DCG
         $dcg = 0;
         for ($i = 0; $i < count($relevanceScores); $i++) {
             $dcg += $relevanceScores[$i] / log(2 + $i, 2);
         }
-        
+
         // Calculate IDCG (ideal DCG)
         $idealRelevanceScores = $relevanceScores;
         rsort($idealRelevanceScores);
-        
+
         $idcg = 0;
         for ($i = 0; $i < count($idealRelevanceScores); $i++) {
             $idcg += $idealRelevanceScores[$i] / log(2 + $i, 2);
         }
-        
+
         return $idcg > 0 ? $dcg / $idcg : 0.0;
     }
- 
+
 
     public function downloadMarcUtf8($id)
     {
@@ -1618,7 +1620,7 @@ public function browse()
             case 'Title':
                 $term = $this->toFtTerm($search);
                 $term ? $builder->where("MATCH(Title) AGAINST ('{$term}' IN BOOLEAN MODE)", null, false)
-                      : $builder->like('Title', $search);
+                    : $builder->like('Title', $search);
                 break;
 
             case 'Author':
@@ -1628,10 +1630,10 @@ public function browse()
                     $term = $this->toFtTerm(sanitizeSearch($author));
                     if ($first) {
                         $term ? $builder->where("MATCH(Author) AGAINST ('{$term}' IN BOOLEAN MODE)", null, false)
-                              : $builder->like('Author', sanitizeSearch($author));
+                            : $builder->like('Author', sanitizeSearch($author));
                     } else {
                         $term ? $builder->orWhere("MATCH(Author) AGAINST ('{$term}' IN BOOLEAN MODE)", null, false)
-                              : $builder->orLike('Author', sanitizeSearch($author));
+                            : $builder->orLike('Author', sanitizeSearch($author));
                     }
                     $first = false;
                 }
@@ -1640,7 +1642,7 @@ public function browse()
             case 'Subject':
                 $term = $this->toFtTerm($search);
                 $term ? $builder->where("MATCH(Subject) AGAINST ('{$term}' IN BOOLEAN MODE)", null, false)
-                      : $builder->like('Subject', $search);
+                    : $builder->like('Subject', $search);
                 break;
 
             case 'ISBN':
@@ -1650,20 +1652,20 @@ public function browse()
             case 'Publisher':
                 $term = $this->toFtTerm($search);
                 $term ? $builder->where("MATCH(Publisher) AGAINST ('{$term}' IN BOOLEAN MODE)", null, false)
-                      : $builder->like('Publisher', $search);
+                    : $builder->like('Publisher', $search);
                 break;
 
             default: // semua kolom
                 $term = $this->toFtTerm($search);
                 if ($term) {
                     $builder->where("MATCH(Title, Author, Subject, Publisher) AGAINST ('{$term}' IN BOOLEAN MODE)", null, false)
-                            ->orLike('ISBN', $search);
+                        ->orLike('ISBN', $search);
                 } else {
                     $builder->orLike('Title', $search)
-                            ->orLike('Author', $rawSearch)
-                            ->orLike('Subject', $search)
-                            ->orLike('ISBN', $search)
-                            ->orLike('Publisher', $search);
+                        ->orLike('Author', $rawSearch)
+                        ->orLike('Subject', $search)
+                        ->orLike('ISBN', $search)
+                        ->orLike('Publisher', $search);
                 }
         }
         $builder->groupEnd();
@@ -1842,7 +1844,7 @@ public function browse()
             'LoanCount'         => 1,
             'ReturnCount'       => 0,
             'Member_id'         => $member_id,
-            'LocationLibrary_id'=> $collection->Location_Library_id ?? null,
+            'LocationLibrary_id' => $collection->Location_Library_id ?? null,
             'Branch_id'         => $member->Branch_id,
             'CreateBy'          => $createdBy,
             'CreateDate'        => $now,

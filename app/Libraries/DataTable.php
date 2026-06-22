@@ -200,7 +200,7 @@ class DataTable
 		$sumQuery = [];
 		foreach (array_keys($this->callbackSumColumns) as $colName) {
 			if (isset($this->columnsQuery[$colName])) {
-				$sumQuery[] = 'SUM(' . $this->columnsQuery[$colName] . ') AS ' . 'sum_' . md5($colName);
+				$sumQuery[] = 'SUM(' . $this->columnsQuery[$colName] . ') AS ' . 'sum_' . substr(hash('sha256', $colName), 0, 32);
 			}
 		}
 
@@ -209,7 +209,7 @@ class DataTable
 			$sumQuery = [];
 			foreach ((clone $this->queryBuilder)->select($selectSum)->limit(1)->get()->getResult() as $row) {
 				foreach ($this->callbackSumColumns as $colName => $callback) {
-					$key = 'sum_' . md5($colName);
+					$key = 'sum_' . substr(hash('sha256', $colName), 0, 32);
 					$sumQuery[$colName] = isset($row->$key) ? $row->$key : 0;
 					if ($callback != null) {
 						$sumQuery[$colName] = $callback($sumQuery[$colName]);
@@ -484,7 +484,7 @@ class DataTable
 		$sumQuery = [];
 		foreach (array_keys($this->callbackSumColumns) as $colName) {
 			if (isset($this->columnsQuery[$colName])) {
-				$sumQuery[] = 'SUM(' . $this->columnsQuery[$colName] . ') AS ' . 'sum_' . md5($colName);
+				$sumQuery[] = 'SUM(' . $this->columnsQuery[$colName] . ') AS ' . 'sum_' . substr(hash('sha256', $colName), 0, 32);
 			}
 		}
 
@@ -493,7 +493,7 @@ class DataTable
 			$sumQuery = [];
 			foreach ((clone $this->queryBuilder)->select($selectSum)->limit(1)->get()->getResult() as $row) {
 				foreach ($this->callbackSumColumns as $colName => $callback) {
-					$key = 'sum_' . md5($colName);
+					$key = 'sum_' . substr(hash('sha256', $colName), 0, 32);
 					$sumQuery[$colName] = isset($row->$key) ? $row->$key : 0;
 					if ($callback != null) {
 						$sumQuery[$colName] = $callback($sumQuery[$colName]);
