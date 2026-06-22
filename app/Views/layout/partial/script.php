@@ -3,13 +3,13 @@
 <script>
     // Memastikan jQuery sudah ter-load sebelum menambal fungsinya
     if (typeof jQuery !== 'undefined') {
-        
+
         // 1. Perbaikan $.isFunction (Lebih aman dari sekadar typeof)
         if (!jQuery.isFunction) {
             jQuery.isFunction = function(obj) {
-                return typeof obj === "function" && 
-                       typeof obj.nodeType !== "number" && 
-                       typeof obj.item !== "function";
+                return typeof obj === "function" &&
+                    typeof obj.nodeType !== "number" &&
+                    typeof obj.item !== "function";
             };
         }
 
@@ -32,7 +32,7 @@
                     return obj + "";
                 }
                 return typeof obj === "object" || typeof obj === "function" ?
-                    Object.prototype.toString.call(obj).match(/\s([a-z]+)/i)[1].toLowerCase() : 
+                    Object.prototype.toString.call(obj).match(/\s([a-z]+)/i)[1].toLowerCase() :
                     typeof obj;
             };
         }
@@ -69,8 +69,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.tiny.cloud/1/32x284pjuqkz6bpk6b6dnfpxfestvjmqesa33sgixmunt7sh/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js" integrity="sha512-kZv5Zq4Cj/9aTpjyYFrt7CmyTUlvBday8NGjD9MxJyOY/f2UfRYluKsFzek26XWQaiAp7SZ0ekE7ooL9IYMM2A==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" integrity="sha512-TA1p+I1AtmUN2QnvpJT01/hjvxCxjyBfXtNuKNnvvwyCaQpdl5JUfiJ7geQtMnJ55myntTq5JwPLiH3j6e222A==" crossorigin="anonymous"></script>
 <!--INIT -->
 <script src="<?= base_url('themes/uigniter/js/vendors') ?>/blockui.js"></script>
 <script src="<?= base_url('themes/uigniter/js/scripts-init'); ?>/app.js"></script>

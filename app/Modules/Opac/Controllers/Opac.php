@@ -1211,7 +1211,7 @@ class Opac extends \Base\Controllers\BaseController
 
         // Root element
         $collection = $xml->createElement('collection');
-        $collection->setAttribute('xmlns', 'http://www.loc.gov/MARC21/slim');
+        $collection->setAttribute('xmlns', 'https://www.loc.gov/MARC21/slim');
         $xml->appendChild($collection);
 
         // Record element
