@@ -330,7 +330,7 @@ $slug = $request->getGet('slug') ?? '';
 
 <?= $this->section('script'); ?>
 <!-- SweetAlert2 CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" integrity="sha512-TA1p+I1AtmUN2QnvpJT01/hjvxCxjyBfXtNuKNnvvwyCaQpdl5JUfiJ7geQtMnJ55myntTq5JwPLiH3j6e222A==" crossorigin="anonymous"></script>
 <script>
     // ===========================================================
     // KONFIGURASI
@@ -366,19 +366,52 @@ $slug = $request->getGet('slug') ?? '';
                     "sFirst": "<i class='fa fa-chevron-double-left'></i>",
                 }
             },
-            "columns": [
-                { data: 'no',               className: 'text-center', orderable: false }, // 0
-                { data: 'NomorBarcode' },                                                  // 1
-                { data: 'Title' },                                                         // 2
-                { data: 'LoanDate',         className: 'text-center' },                   // 3
-                { data: 'LateDays',         className: 'text-center' },                   // 4
-                { data: 'LocationLibrary' },                                               // 5
-                { data: 'UpdateDate',       className: 'text-center' },                   // 6
-                { data: 'CollectionLoan_id', visible: false },                             // 7 (Grouping)
-                { data: 'ID',               visible: false },                              // 8
-                { data: 'Fullname',         visible: false },                              // 9
-                { data: 'DueDate',          visible: false },                              // 10
-                { data: 'Publisher',        visible: false },                              // 11
+            "columns": [{
+                    data: 'no',
+                    className: 'text-center',
+                    orderable: false
+                }, // 0
+                {
+                    data: 'NomorBarcode'
+                }, // 1
+                {
+                    data: 'Title'
+                }, // 2
+                {
+                    data: 'LoanDate',
+                    className: 'text-center'
+                }, // 3
+                {
+                    data: 'LateDays',
+                    className: 'text-center'
+                }, // 4
+                {
+                    data: 'LocationLibrary'
+                }, // 5
+                {
+                    data: 'UpdateDate',
+                    className: 'text-center'
+                }, // 6
+                {
+                    data: 'CollectionLoan_id',
+                    visible: false
+                }, // 7 (Grouping)
+                {
+                    data: 'ID',
+                    visible: false
+                }, // 8
+                {
+                    data: 'Fullname',
+                    visible: false
+                }, // 9
+                {
+                    data: 'DueDate',
+                    visible: false
+                }, // 10
+                {
+                    data: 'Publisher',
+                    visible: false
+                }, // 11
                 // ===== KOLOM AKSI NOTIFIKASI (BARU) =====
                 {
                     data: 'action',
@@ -390,33 +423,42 @@ $slug = $request->getGet('slug') ?? '';
                         // Hanya tampilkan tombol jika sudah melewati jatuh tempo
                         if (row.DueDate < today) {
                             // Pakai data-* attribute agar aman dari karakter kutip
-                            return '<button'
-                                + ' class="btn-notify btn-notify-single btn-send-notif"'
-                                + ' data-id="'       + (row.ID || data) + '"'
-                                + ' data-fullname="' + String(row.Fullname || '').replace(/"/g, '&quot;') + '"'
-                                + ' data-title="'   + stripHtml(row.Title || '').replace(/"/g, '&quot;') + '"'
-                                + ' data-publisher="' + stripHtml(row.Publisher || '').replace(/"/g, '&quot;') + '"'
-                                + ' title="Kirim notifikasi keterlambatan ke anggota ini">'
-                                + '<i class="fa fa-bell"></i> Kirim Notifikasi Keterlambatan'
-                                + '</button>';
+                            return '<button' +
+                                ' class="btn-notify btn-notify-single btn-send-notif"' +
+                                ' data-id="' + (row.ID || data) + '"' +
+                                ' data-fullname="' + String(row.Fullname || '').replace(/"/g, '&quot;') + '"' +
+                                ' data-title="' + stripHtml(row.Title || '').replace(/"/g, '&quot;') + '"' +
+                                ' data-publisher="' + stripHtml(row.Publisher || '').replace(/"/g, '&quot;') + '"' +
+                                ' title="Kirim notifikasi keterlambatan ke anggota ini">' +
+                                '<i class="fa fa-bell"></i> Kirim Notifikasi Keterlambatan' +
+                                '</button>';
                         }
                         return '<span class="text-muted" style="font-size:11px;">\u2014</span>';
                     }
                 }, // 12
             ],
-            "columnDefs": [
-                { targets: [0, 7, 8, 9, 10, 11], searchable: false },
-                { targets: [0, 2, 3, 4, 7, 12],  orderable: false  }
+            "columnDefs": [{
+                    targets: [0, 7, 8, 9, 10, 11],
+                    searchable: false
+                },
+                {
+                    targets: [0, 2, 3, 4, 7, 12],
+                    orderable: false
+                }
             ],
             "order": [
                 [7, "desc"]
             ],
             "drawCallback": function(settings) {
-                var api  = this.api();
-                var rows = api.rows({ page: 'current' }).nodes();
+                var api = this.api();
+                var rows = api.rows({
+                    page: 'current'
+                }).nodes();
                 var last = null;
 
-                api.column(groupColumn, { page: 'current' })
+                api.column(groupColumn, {
+                        page: 'current'
+                    })
                     .data()
                     .each(function(group, i) {
                         if (last !== group) {
@@ -456,9 +498,9 @@ $slug = $request->getGet('slug') ?? '';
 
     // Delegasikan event ke tbody agar tetap bekerja setelah DataTable re-draw
     $('#tbl_data tbody').on('click', '.btn-send-notif', function() {
-        var id        = $(this).data('id');
-        var fullname  = $(this).data('fullname');
-        var title     = $(this).data('title');
+        var id = $(this).data('id');
+        var fullname = $(this).data('fullname');
+        var title = $(this).data('title');
         var publisher = $(this).data('publisher');
         openSingleNotifyModal(id, fullname, title, publisher);
     });
@@ -468,17 +510,17 @@ $slug = $request->getGet('slug') ?? '';
 
         Swal.fire({
             title: '<span style="font-size:16px;">Kirim Notifikasi Keterlambatan?</span>',
-            html: '<div style="text-align:left;font-size:13px;">'
-                + '<p style="margin:0 0 6px;color:#6b7280;">Email notifikasi akan dikirim ke anggota:</p>'
-                + '<p style="margin:0 0 2px;font-weight:700;font-size:15px;color:#1e293b;">' + escapeHtml(fullname) + '</p>'
-                + '<p style="margin:0 0 10px;color:#64748b;font-size:12px;">'
-                + '<i class="fa fa-book mr-1 text-info"></i>'
-                + '<strong>' + escapeHtml(title) + '</strong>'
-                + (publisher ? ' <span style="color:#9ca3af;">— ' + escapeHtml(publisher) + '</span>' : '')
-                + '</p>'
-                + '<div style="background:#fef2f2;border-radius:6px;padding:8px 12px;font-size:12px;color:#b91c1c;">'
-                + '<i class="fa fa-exclamation-triangle mr-1"></i>Buku telah melewati jatuh tempo pengembalian.'
-                + '</div></div>',
+            html: '<div style="text-align:left;font-size:13px;">' +
+                '<p style="margin:0 0 6px;color:#6b7280;">Email notifikasi akan dikirim ke anggota:</p>' +
+                '<p style="margin:0 0 2px;font-weight:700;font-size:15px;color:#1e293b;">' + escapeHtml(fullname) + '</p>' +
+                '<p style="margin:0 0 10px;color:#64748b;font-size:12px;">' +
+                '<i class="fa fa-book mr-1 text-info"></i>' +
+                '<strong>' + escapeHtml(title) + '</strong>' +
+                (publisher ? ' <span style="color:#9ca3af;">— ' + escapeHtml(publisher) + '</span>' : '') +
+                '</p>' +
+                '<div style="background:#fef2f2;border-radius:6px;padding:8px 12px;font-size:12px;color:#b91c1c;">' +
+                '<i class="fa fa-exclamation-triangle mr-1"></i>Buku telah melewati jatuh tempo pengembalian.' +
+                '</div></div>',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#f97316',
@@ -505,7 +547,9 @@ $slug = $request->getGet('slug') ?? '';
             html: '<span style="font-size:13px;color:#6b7280;">Harap tunggu sebentar.</span>',
             allowOutsideClick: false,
             allowEscapeKey: false,
-            didOpen: function() { Swal.showLoading(); }
+            didOpen: function() {
+                Swal.showLoading();
+            }
         });
 
         $.ajax({
@@ -585,9 +629,9 @@ $slug = $request->getGet('slug') ?? '';
                 // Render list anggota
                 var html = '';
                 res.data.forEach(function(member) {
-                    var emailBadge = member.has_email
-                        ? `<span class="has-email-badge"><i class="fa fa-check"></i> ${member.email}</span>`
-                        : `<span class="no-email-badge"><i class="fa fa-times"></i> Tidak ada email</span>`;
+                    var emailBadge = member.has_email ?
+                        `<span class="has-email-badge"><i class="fa fa-check"></i> ${member.email}</span>` :
+                        `<span class="no-email-badge"><i class="fa fa-times"></i> Tidak ada email</span>`;
 
                     var booksHtml = member.books.map(function(book) {
                         return `<div class="book-item">
@@ -647,8 +691,8 @@ $slug = $request->getGet('slug') ?? '';
                 $('#send-all-content').hide();
 
                 var alertClass = res.success ? 'success' : 'warning';
-                var icon       = res.success ? 'check-circle' : 'exclamation-triangle';
-                var errHtml    = '';
+                var icon = res.success ? 'check-circle' : 'exclamation-triangle';
+                var errHtml = '';
 
                 if (res.detail && res.detail.errors && res.detail.errors.length > 0) {
                     errHtml = '<ul class="mt-2 mb-0 small">' +
@@ -681,23 +725,25 @@ $slug = $request->getGet('slug') ?? '';
                 var swalIcon = res.success ? 'success' : 'warning';
                 var swalHtml = '<p style="font-size:14px;margin-bottom:12px;">' + escapeHtml(res.message) + '</p>';
                 if (res.detail) {
-                    swalHtml += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;">'
-                        + '<div style="background:#fef2f2;border-radius:8px;padding:10px;text-align:center;">'
-                        + '<div style="font-size:24px;font-weight:800;color:#dc2626;">' + res.detail.total_item_terlambat + '</div>'
-                        + '<div style="font-size:11px;color:#6b7280;">Item Terlambat</div></div>'
-                        + '<div style="background:#f0fdf4;border-radius:8px;padding:10px;text-align:center;">'
-                        + '<div style="font-size:24px;font-weight:800;color:#16a34a;">' + res.detail.email_terkirim + '</div>'
-                        + '<div style="font-size:11px;color:#6b7280;">Email Terkirim</div></div>'
-                        + '<div style="background:#f8fafc;border-radius:8px;padding:10px;text-align:center;">'
-                        + '<div style="font-size:24px;font-weight:800;color:#64748b;">' + res.detail.email_gagal + '</div>'
-                        + '<div style="font-size:11px;color:#6b7280;">Gagal</div></div>'
-                        + '</div>';
+                    swalHtml += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;">' +
+                        '<div style="background:#fef2f2;border-radius:8px;padding:10px;text-align:center;">' +
+                        '<div style="font-size:24px;font-weight:800;color:#dc2626;">' + res.detail.total_item_terlambat + '</div>' +
+                        '<div style="font-size:11px;color:#6b7280;">Item Terlambat</div></div>' +
+                        '<div style="background:#f0fdf4;border-radius:8px;padding:10px;text-align:center;">' +
+                        '<div style="font-size:24px;font-weight:800;color:#16a34a;">' + res.detail.email_terkirim + '</div>' +
+                        '<div style="font-size:11px;color:#6b7280;">Email Terkirim</div></div>' +
+                        '<div style="background:#f8fafc;border-radius:8px;padding:10px;text-align:center;">' +
+                        '<div style="font-size:24px;font-weight:800;color:#64748b;">' + res.detail.email_gagal + '</div>' +
+                        '<div style="font-size:11px;color:#6b7280;">Gagal</div></div>' +
+                        '</div>';
                     if (res.detail.errors && res.detail.errors.length > 0) {
-                        swalHtml += '<div style="margin-top:10px;text-align:left;background:#fef2f2;border-radius:6px;padding:8px 12px;">'
-                            + '<p style="font-size:12px;font-weight:600;color:#dc2626;margin:0 0 4px;">Error Detail:</p>'
-                            + '<ul style="font-size:12px;color:#7f1d1d;margin:0;padding-left:16px;">'
-                            + res.detail.errors.map(function(e){ return '<li>' + escapeHtml(e) + '</li>'; }).join('')
-                            + '</ul></div>';
+                        swalHtml += '<div style="margin-top:10px;text-align:left;background:#fef2f2;border-radius:6px;padding:8px 12px;">' +
+                            '<p style="font-size:12px;font-weight:600;color:#dc2626;margin:0 0 4px;">Error Detail:</p>' +
+                            '<ul style="font-size:12px;color:#7f1d1d;margin:0;padding-left:16px;">' +
+                            res.detail.errors.map(function(e) {
+                                return '<li>' + escapeHtml(e) + '</li>';
+                            }).join('') +
+                            '</ul></div>';
                     }
                 }
 

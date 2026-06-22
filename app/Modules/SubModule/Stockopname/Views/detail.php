@@ -231,7 +231,7 @@
                 </div>
             </div>
             <div class="page-title-actions">
-                
+
                 <nav class="ms-3" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
@@ -290,7 +290,7 @@
         </div>
     </div>
 
-  
+
 
 
     <!-- Barcode Scanner -->
@@ -360,8 +360,8 @@
                                                 <td><?= $detail['Author'] ?></td>
                                                 <td>
                                                     <select class="form-select form-select-sm select-lokasi"
-                                                            data-detail-id="<?= $detail['ID'] ?>"
-                                                            data-field="current_location_id">
+                                                        data-detail-id="<?= $detail['ID'] ?>"
+                                                        data-field="current_location_id">
                                                         <?php foreach ($locations as $loc): ?>
                                                             <option value="<?= $loc->ID ?>"
                                                                 <?= $loc->ID == $detail['CurrentLocationID'] ? 'selected' : '' ?>>
@@ -375,8 +375,8 @@
                                                 </td>
                                                 <td>
                                                     <select class="form-select form-select-sm select-status"
-                                                            data-detail-id="<?= $detail['ID'] ?>"
-                                                            data-field="current_status_id">
+                                                        data-detail-id="<?= $detail['ID'] ?>"
+                                                        data-field="current_status_id">
                                                         <?php foreach ($statuses as $st): ?>
                                                             <option value="<?= $st->ID ?>"
                                                                 <?= $st->ID == $detail['CurrentStatusID'] ? 'selected' : '' ?>>
@@ -390,8 +390,8 @@
                                                 </td>
                                                 <td>
                                                     <select class="form-select form-select-sm select-rule"
-                                                            data-detail-id="<?= $detail['ID'] ?>"
-                                                            data-field="current_collection_rule_id">
+                                                        data-detail-id="<?= $detail['ID'] ?>"
+                                                        data-field="current_collection_rule_id">
                                                         <?php foreach ($rules as $rule): ?>
                                                             <option value="<?= $rule->ID ?>"
                                                                 <?= $rule->ID == $detail['CurrentCollectionRuleID'] ? 'selected' : '' ?>>
@@ -429,7 +429,7 @@
         </div>
     </div>
 
-      <!-- Location & Status Summary Table -->
+    <!-- Location & Status Summary Table -->
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
@@ -524,8 +524,8 @@
 
 
 <!-- Scripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" integrity="sha512-VK2zcvntEufaimc+efOYi622VN5ZacdnufnmX7zIhCPmjhKnOi9ZDMtg1/ug5l183f19gG1/cBstPO4D8N/Img==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <?= $this->endSection('page'); ?>
 
@@ -561,37 +561,43 @@
             pageLength: 25,
             scrollX: true,
             scrollCollapse: true,
-            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, 'Semua']],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, 'Semua']
+            ],
             language: {
-                search:           'Cari:',
-                lengthMenu:       'Tampilkan _MENU_ data',
-                info:             'Menampilkan _START_ - _END_ dari _TOTAL_ data',
-                infoEmpty:        'Tidak ada data',
-                infoFiltered:     '(difilter dari _MAX_ total data)',
-                zeroRecords:      'Data tidak ditemukan',
+                search: 'Cari:',
+                lengthMenu: 'Tampilkan _MENU_ data',
+                info: 'Menampilkan _START_ - _END_ dari _TOTAL_ data',
+                infoEmpty: 'Tidak ada data',
+                infoFiltered: '(difilter dari _MAX_ total data)',
+                zeroRecords: 'Data tidak ditemukan',
                 paginate: {
-                    first:    'Pertama',
-                    last:     'Terakhir',
-                    next:     'Berikutnya',
+                    first: 'Pertama',
+                    last: 'Terakhir',
+                    next: 'Berikutnya',
                     previous: 'Sebelumnya',
                 },
             },
             order: [],
-            columnDefs: [
-                { orderable: false, targets: 0 },
-            ],
+            columnDefs: [{
+                orderable: false,
+                targets: 0
+            }, ],
         });
 
         // Inline select — update lokasi / status / aturan
         $(document).on('change', '.select-lokasi, .select-status, .select-rule', function() {
-            const $sel      = $(this);
-            const detailId  = $sel.data('detail-id');
-            const field     = $sel.data('field');
-            const value     = $sel.val();
+            const $sel = $(this);
+            const detailId = $sel.data('detail-id');
+            const field = $sel.data('field');
+            const value = $sel.val();
 
             $sel.addClass('select-saving');
 
-            const payload = { detail_id: detailId };
+            const payload = {
+                detail_id: detailId
+            };
             payload[field] = value;
 
             $.ajax({
@@ -601,14 +607,28 @@
                 dataType: 'json',
                 success: function(res) {
                     if (res.status === 'success') {
-                        Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Berhasil diperbarui', timer: 1500, showConfirmButton: false });
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Berhasil diperbarui',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
                     } else {
-                        Swal.fire({ icon: 'error', title: 'Gagal', text: res.message || 'Gagal memperbarui' });
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: res.message || 'Gagal memperbarui'
+                        });
                         $sel.val($sel.data('prev-val'));
                     }
                 },
                 error: function() {
-                    Swal.fire({ icon: 'error', title: 'Gagal', text: 'Terjadi kesalahan jaringan' });
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Terjadi kesalahan jaringan'
+                    });
                     $sel.val($sel.data('prev-val'));
                 },
                 complete: function() {
@@ -658,7 +678,11 @@
         const barcode = $('#barcodeInput').val().trim();
 
         if (!barcode) {
-            Swal.fire({ icon: 'warning', title: 'Peringatan', text: 'Mohon masukkan nomor barcode' });
+            Swal.fire({
+                icon: 'warning',
+                title: 'Peringatan',
+                text: 'Mohon masukkan nomor barcode'
+            });
             return;
         }
 
@@ -677,17 +701,31 @@
             dataType: 'json',
             success: function(response) {
                 if (response.status === 'success') {
-                    Swal.fire({ icon: 'success', title: 'Berhasil', text: response.message, timer: 1500, showConfirmButton: false });
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: response.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
                     addNewRowToTable(response.data);
                     $('#barcodeInput').val('').focus();
                     updateSummary();
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Gagal', text: response.message });
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: response.message
+                    });
                     $('#barcodeInput').select();
                 }
             },
             error: function(xhr, status, error) {
-                Swal.fire({ icon: 'error', title: 'Gagal', text: 'Terjadi kesalahan saat memproses barcode' });
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Terjadi kesalahan saat memproses barcode'
+                });
                 console.error('Error:', error);
             },
             complete: function() {
@@ -805,7 +843,11 @@
                 }
             },
             error: function() {
-                Swal.fire({ icon: 'error', title: 'Gagal', text: 'Gagal memuat informasi koleksi' });
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Gagal memuat informasi koleksi'
+                });
             }
         });
     }
@@ -821,15 +863,31 @@
             dataType: 'json',
             success: function(response) {
                 if (response.status === 'success') {
-                    Swal.fire({ icon: 'success', title: 'Berhasil', text: response.message, timer: 1500, showConfirmButton: false })
-                        .then(() => { location.reload(); });
+                    Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        })
+                        .then(() => {
+                            location.reload();
+                        });
                     $('#editModal').modal('hide');
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Gagal', text: response.message });
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: response.message
+                    });
                 }
             },
             error: function() {
-                Swal.fire({ icon: 'error', title: 'Gagal', text: 'Terjadi kesalahan saat memperbarui data' });
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Terjadi kesalahan saat memperbarui data'
+                });
             }
         });
     }
@@ -852,18 +910,32 @@
                     dataType: 'json',
                     success: function(response) {
                         if (response.status === 'success') {
-                            Swal.fire({ icon: 'success', title: 'Berhasil', text: response.message, timer: 1500, showConfirmButton: false });
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: response.message,
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
                             $(`#row-${detailId}`).fadeOut(500, function() {
                                 $(this).remove();
                                 updateRowNumbers();
                                 updateSummary();
                             });
                         } else {
-                            Swal.fire({ icon: 'error', title: 'Gagal', text: response.message });
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: response.message
+                            });
                         }
                     },
                     error: function() {
-                        Swal.fire({ icon: 'error', title: 'Gagal', text: 'Terjadi kesalahan saat menghapus data' });
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan saat menghapus data'
+                        });
                     }
                 });
             }

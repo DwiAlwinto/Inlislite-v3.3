@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Template Kartu Editor</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,7 +19,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
@@ -79,7 +80,7 @@
             border: 2px solid #ccc;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             background-size: cover;
             background-position: center;
             cursor: crosshair;
@@ -107,7 +108,7 @@
 
         .element-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .element-item.dragging {
@@ -126,7 +127,7 @@
             font-size: 12px;
             min-width: 80px;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .draggable-element:hover {
@@ -263,7 +264,7 @@
             right: 0;
             bottom: 0;
             pointer-events: none;
-            border: 1px dashed rgba(0,0,0,0.2);
+            border: 1px dashed rgba(0, 0, 0, 0.2);
         }
 
         .guide-line {
@@ -295,13 +296,14 @@
         }
     </style>
 </head>
+
 <body>
     <div class="editor-container">
         <div class="editor-header">
             <h1><i class="fas fa-id-card"></i> Template Kartu Editor</h1>
             <p>Drag elemen dari sidebar dan posisikan di kanvas kartu</p>
         </div>
-        
+
         <div class="editor-content">
             <div class="sidebar">
                 <!-- Form Settings -->
@@ -434,9 +436,12 @@
                 this.canvas = document.getElementById('cardCanvas');
                 this.selectedElement = null;
                 this.elements = [];
-                this.dragOffset = { x: 0, y: 0 };
+                this.dragOffset = {
+                    x: 0,
+                    y: 0
+                };
                 this.backgroundImage = null;
-                
+
                 this.init();
             }
 
@@ -522,7 +527,7 @@
                     const rect = this.canvas.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
-                    
+
                     this.createElement(elementType, x, y);
                 });
             }
@@ -555,13 +560,13 @@
                         </button>
                     </div>
                 `;
-                
+
                 element.style.left = x + 'px';
                 element.style.top = y + 'px';
 
                 // Make element draggable within canvas
                 this.makeElementDraggable(element);
-                
+
                 // Add click handler for selection
                 element.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -590,28 +595,28 @@
 
                 element.addEventListener('mousedown', (e) => {
                     if (e.target.classList.contains('control-btn')) return;
-                    
+
                     isDragging = true;
                     startX = e.clientX;
                     startY = e.clientY;
                     initialLeft = parseInt(element.style.left);
                     initialTop = parseInt(element.style.top);
-                    
+
                     document.addEventListener('mousemove', onMouseMove);
                     document.addEventListener('mouseup', onMouseUp);
-                    
+
                     e.preventDefault();
                 });
 
                 const onMouseMove = (e) => {
                     if (!isDragging) return;
-                    
+
                     const deltaX = e.clientX - startX;
                     const deltaY = e.clientY - startY;
-                    
+
                     const newLeft = Math.max(0, Math.min(this.canvas.offsetWidth - element.offsetWidth, initialLeft + deltaX));
                     const newTop = Math.max(0, Math.min(this.canvas.offsetHeight - element.offsetHeight, initialTop + deltaY));
-                    
+
                     element.style.left = newLeft + 'px';
                     element.style.top = newTop + 'px';
                 };
@@ -620,7 +625,7 @@
                     isDragging = false;
                     document.removeEventListener('mousemove', onMouseMove);
                     document.removeEventListener('mouseup', onMouseUp);
-                    
+
                     // Update element data
                     const elementData = this.elements.find(el => el.type === element.dataset.type);
                     if (elementData) {
@@ -647,7 +652,7 @@
             showPropertyPanel(element) {
                 const panel = document.getElementById('propertyPanel');
                 const elementData = this.elements.find(el => el.type === element.dataset.type);
-                
+
                 if (elementData) {
                     document.getElementById('fontSize').value = elementData.fontSize;
                     document.getElementById('fontColor').value = elementData.fontColor;
@@ -683,13 +688,13 @@
             removeElement(button) {
                 const element = button.closest('.draggable-element');
                 const elementType = element.dataset.type;
-                
+
                 // Remove from DOM
                 element.remove();
-                
+
                 // Remove from data
                 this.elements = this.elements.filter(el => el.type !== elementType);
-                
+
                 // Hide property panel if this was selected
                 if (this.selectedElement === element) {
                     this.selectedElement = null;
@@ -727,10 +732,10 @@
 
             saveTemplate() {
                 const templateData = this.generateTemplateData();
-                
+
                 // You can send this to your PHP backend
                 console.log('Template Data:', templateData);
-                
+
                 // Example AJAX call (uncomment and modify as needed)
                 /*
                 fetch('your-save-endpoint.php', {
@@ -749,7 +754,7 @@
                     alert('Error saving template');
                 });
                 */
-                
+
                 alert('Template data ready to save! Check console for details.');
             }
         }
@@ -767,4 +772,5 @@
         });
     </script>
 </body>
+
 </html>
