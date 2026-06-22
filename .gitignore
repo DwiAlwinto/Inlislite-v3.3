@@ -45,7 +45,6 @@ $RECYCLE.BIN/
 .env
 .vagrant
 Vagrantfile
-composer.lock
 public/uploads
 !public/uploads/default
 

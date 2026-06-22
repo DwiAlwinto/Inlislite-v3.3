@@ -1282,7 +1282,7 @@ class Opac extends \Base\Controllers\BaseController
         $xml->formatOutput = true;
 
         $mods = $xml->createElement('mods');
-        $mods->setAttribute('xmlns', 'http://www.loc.gov/mods/v3');
+        $mods->setAttribute('xmlns', 'https://www.loc.gov/mods/v3');
         $mods->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
         $mods->setAttribute('xsi:schemaLocation', 'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd');
         $xml->appendChild($mods);
@@ -1458,10 +1458,10 @@ class Opac extends \Base\Controllers\BaseController
         $xml->formatOutput = true;
 
         $oai_dc = $xml->createElement('oai_dc:dc');
-        $oai_dc->setAttribute('xmlns:oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/');
-        $oai_dc->setAttribute('xmlns:dc', 'http://purl.org/dc/elements/1.1/');
-        $oai_dc->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-        $oai_dc->setAttribute('xsi:schemaLocation', 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd');
+        $oai_dc->setAttribute('xmlns:oai_dc', 'https://www.openarchives.org/OAI/2.0/oai_dc/');
+        $oai_dc->setAttribute('xmlns:dc', 'https://purl.org/dc/elements/1.1/');
+        $oai_dc->setAttribute('xmlns:xsi', 'https://www.w3.org/2001/XMLSchema-instance');
+        $oai_dc->setAttribute('xsi:schemaLocation', 'https://www.openarchives.org/OAI/2.0/oai_dc/ https://www.openarchives.org/OAI/2.0/oai_dc.xsd');
         $xml->appendChild($oai_dc);
 
         foreach ($marc as $field) {
