@@ -9,6 +9,12 @@ class SelfLoan extends \App\Controllers\BaseController
     protected $data = [];
     protected $session;
 
+    // Constants for magic numbers
+    private const MEMBER_STATUS_ACTIVE = 3;
+    private const COLLECTION_STATUS_AVAILABLE = 1;
+    private const COLLECTION_STATUS_BORROWED = 5;
+    private const COLLECTION_RULE_LOANABLE = 1;
+
     function __construct()
     {
         $this->language = \Config\Services::language();
@@ -105,7 +111,7 @@ class SelfLoan extends \App\Controllers\BaseController
             }
 
             // Check member status
-            if ($member->StatusAnggota_id != 3) { // Assuming 3 = active status
+            if ($member->StatusAnggota_id != self::MEMBER_STATUS_ACTIVE) {
                 return ['success' => false, 'message' => 'Status anggota tidak aktif'];
             }
 
@@ -249,12 +255,12 @@ class SelfLoan extends \App\Controllers\BaseController
             }
 
             // Check if collection can be loaned
-            if ($collection->Rule_id != 1) {
+            if ($collection->Rule_id != self::COLLECTION_RULE_LOANABLE) {
                 return ['success' => false, 'message' => 'Koleksi ini tidak dapat dipinjam'];
             }
 
             // Check collection status (assuming status_id 1 = available)
-            if ($collection->Status_id != 1) {
+            if ($collection->Status_id != self::COLLECTION_STATUS_AVAILABLE) {
                 return ['success' => false, 'message' => 'Koleksi sedang tidak tersedia untuk dipinjam'];
             }
 
@@ -577,7 +583,7 @@ class SelfLoan extends \App\Controllers\BaseController
                 'ReturnCount' => 0,
                 'Member_id' => $memberData['id'],
                 'Branch_id' => $memberData['branch_id'],
-                'CreateBy' => 1, // System user
+                'CreateBy' => login_id(), // System user
                 'CreateDate' => $loanDate,
                 'CreateTerminal' => $this->request->getIPAddress(),
                 'LocationLibrary_id' => $locationId,
@@ -600,7 +606,7 @@ class SelfLoan extends \App\Controllers\BaseController
                     'LoanStatus' => 'Loan',
                     'Collection_id' => $book['id'],
                     'member_id' => $memberData['id'], // Pastikan nama kolom di DB Anda memang huruf kecil 'member_id'
-                    'CreateBy' => 1,
+                    'CreateBy' => login_id(),
                     'CreateDate' => $loanDate,
                     'CreateTerminal' => $this->request->getIPAddress(),
                     'Branch_id' => $memberData['branch_id'],
@@ -616,7 +622,7 @@ class SelfLoan extends \App\Controllers\BaseController
                 if (!$this->db->table('collections')
                     ->where('ID', $book['id'])
                     ->update([
-                        'Status_id' => 5, // Dipinjam status
+                        'Status_id' => self::COLLECTION_STATUS_BORROWED, // Dipinjam status
                         'UpdateBy' => 1,
                         'UpdateDate' => $loanDate,
                         'UpdateTerminal' => $this->request->getIPAddress()

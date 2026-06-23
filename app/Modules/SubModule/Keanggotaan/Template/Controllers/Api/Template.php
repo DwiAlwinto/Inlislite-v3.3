@@ -2,6 +2,7 @@
 
 namespace Template\Controllers\Api;
 
+use Exception;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\Files\File;

@@ -112,7 +112,7 @@ class GuestBook extends \App\Controllers\BaseController
 
 		if ($this->request->getPost() && $this->validation->withRequest($this->request)->run()) {
 			$member_no = $this->request->getPost('member_no');
-			$member = get_ref_single('members', 'MemberNo="' . $member_no . '"', 'data');
+			$member = $this->db->table('members')->where('MemberNo', $member_no)->get()->getRow();
 
 			if (!empty($member)) {
 				// 1. Buat array data dengan informasi yang pasti disimpan
@@ -212,7 +212,7 @@ class GuestBook extends \App\Controllers\BaseController
 				'Alamat' => $this->request->getPost('Alamat'),
 				'Location_id' => $locationId,
 				'Branch_id' => $branch_id,
-				'CreateBy' => user_id(),
+				'CreateBy' => login_id(),
 			];
 			// 2. Periksa setting dari database
 			$SettingBukuTamu = $this->settingModel->where('Name', 'SettingBukuTamu')->first()->Value ?? '0';
@@ -392,7 +392,7 @@ class GuestBook extends \App\Controllers\BaseController
 					// System fields
 					'Location_ID' => $locationId,
 					'Branch_id' => $branch_id,
-					'CreateBy' => user_id(),
+					'CreateBy' => login_id(),
 					'CreateDate' => date('Y-m-d H:i:s'),
 					'CreateTerminal' => $this->request->getIPAddress(),
 				];

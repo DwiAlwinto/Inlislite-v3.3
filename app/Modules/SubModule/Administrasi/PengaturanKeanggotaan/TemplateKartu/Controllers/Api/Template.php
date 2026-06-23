@@ -2,6 +2,8 @@
 
 namespace TemplateKartu\Controllers\Api;
 
+
+use Exception;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\Files\File;
 use App\Libraries\DataTable;

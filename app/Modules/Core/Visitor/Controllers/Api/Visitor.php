@@ -1,7 +1,7 @@
 <?php
 
 namespace Visitor\Controllers\Api;
-
+use Exception;
 use CodeIgniter\API\ResponseTrait;
 use App\Libraries\DataTable;
 //use Hermawan\DataTables\DataTable;

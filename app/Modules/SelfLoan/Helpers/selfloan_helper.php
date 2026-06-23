@@ -1,29 +1,37 @@
 <?php
 
-// File: app/Helpers/selfloan_helper.php
+// Status constants
+define('MEMBER_STATUS_ACTIVE', 3);
+define('COLLECTION_STATUS_AVAILABLE', 1);
+define('COLLECTION_STATUS_BORROWED', 5);
+define('COLLECTION_RULE_LOANABLE', 1);
 
-if (!function_exists('generate_loan_number')) {
-    /**
-     * Generate unique loan number
-     */
-    function generate_loan_number($prefix = 'LN')
-    {
-        $db = \Config\Database::connect('data');
+// Loan status constants
+define('LOAN_STATUS_LOAN', 'Loan');
+define('LOAN_STATUS_OVERDUE', 'Dipinjam');  // String version for compatibility
+define('LOAN_STATUS_RETURNED', 'Dikembalikan');
+define('LOAN_STATUS_ACTIVE', 'Dipinjam');
 
-        do {
-            $timestamp = date('YmdHis');
-            // ✅ GUNAKAN random_int() yang cryptographically secure
-            $random = str_pad(random_int(1, 999), 3, '0', STR_PAD_LEFT);
-            $loanNumber = $prefix . $timestamp . $random;
+/**
+ * Generate unique loan number
+ */
+function generate_loan_number($prefix = 'LN')
+{
+    $db = \Config\Database::connect('data');
 
-            // Check if number already exists
-            $exists = $db->table('collectionloans')
-                ->where('ID', $loanNumber)
-                ->countAllResults() > 0;
-        } while ($exists);
+    do {
+        $timestamp = date('YmdHis');
+        // ✅ GUNAKAN random_int() yang cryptographically secure
+        $random = str_pad(random_int(1, 999), 3, '0', STR_PAD_LEFT);
+        $loanNumber = $prefix . $timestamp . $random;
 
-        return $loanNumber;
-    }
+        // Check if number already exists
+        $exists = $db->table('collectionloans')
+            ->where('ID', $loanNumber)
+            ->countAllResults() > 0;
+    } while ($exists);
+
+    return $loanNumber;
 }
 
 if (!function_exists('check_member_loan_eligibility')) {

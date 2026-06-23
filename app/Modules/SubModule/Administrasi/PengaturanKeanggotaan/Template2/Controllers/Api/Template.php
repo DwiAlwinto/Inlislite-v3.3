@@ -2,10 +2,12 @@
 
 namespace Template\Controllers\Api;
 
+
+use Exception;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\Files\File;
 use App\Libraries\DataTable;
-//use Hermawan\DataTables\DataTable;
+
 
 class Template extends \Base\Controllers\BaseResourceController
 {

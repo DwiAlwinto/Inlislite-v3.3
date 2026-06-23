@@ -5,7 +5,6 @@ $slug = $request->getGet('slug') ?? '';
 
 <?= $this->extend('App\Views\layout\main'); ?>
 <?= $this->section('style'); ?>
-<!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" integrity="sha512-PT0RvABaDhDQugEbpNMwgYBCnGCiTZMh9yOzUsJHDgl/dMhD9yjHAwoumnUk3JydV3QTcIkNDuN40CJxik5+WQ==" crossorigin="anonymous"> -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" integrity="sha512-PT0RvABaDhDQugEbpNMwgYBCnGCiTZMh9yOzUsJHDgl/dMhD9yjHAwoumnUk3JydV3QTcIkNDuN40CJxik5+WQ==" crossorigin="anonymous">
 <?= $this->endSection('style'); ?>
 
@@ -46,9 +45,19 @@ $slug = $request->getGet('slug') ?? '';
                 <?php if (session()->getFlashdata('message')): ?>
                     <?php $message = session()->getFlashdata('message'); ?>
                     <?php if (is_array($message)): ?>
-                        <div class="alert alert-<?= $message['type'] == 'error' ? 'danger' : $message['type'] ?> alert-dismissible fade show" role="alert">
-                            <i class="fa <?= $message['type'] == 'success' ? 'fa-check-circle' : ($message['type'] == 'error' ? 'fa-exclamation-triangle' : 'fa-info-circle') ?> mr-2"></i>
-                            <strong><?= ucfirst($message['type'] == 'error' ? 'Error' : $message['type']) ?>!</strong> <?= esc($message['text']) ?>
+                        <?php
+                        $alertType = $message['type'] == 'error' ? 'danger' : $message['type'];
+                        $iconClass = 'fa-check-circle';
+                        if ($message['type'] == 'error') {
+                            $iconClass = 'fa-exclamation-triangle';
+                        } elseif ($message['type'] != 'success') {
+                            $iconClass = 'fa-info-circle';
+                        }
+                        $alertTitle = ucfirst($message['type'] == 'error' ? 'Error' : $message['type']);
+                        ?>
+                        <div class="alert alert-<?= $alertType ?> alert-dismissible fade show" role="alert">
+                            <i class="fa <?= $iconClass ?> mr-2"></i>
+                            <strong><?= $alertTitle ?>!</strong> <?= esc($message['text']) ?>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -73,7 +82,7 @@ $slug = $request->getGet('slug') ?? '';
                 <table style="width: 100%;" id="tbl_data" class="table table-hover table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th class="text-center" width="35">No</th>
+                            <th class="text-center">No</th>
                             <th>Nama</th>
                             <th>NIP</th>
                             <th>No. HP</th>
@@ -81,7 +90,7 @@ $slug = $request->getGet('slug') ?? '';
                             <th>Jenis Kelamin</th>
                             <th>Pendidikan</th>
                             <th>Jabatan</th>
-                            <th class="text-center" width="120">Aksi</th>
+                            <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>

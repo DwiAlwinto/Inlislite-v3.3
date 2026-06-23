@@ -11506,7 +11506,6 @@ button,
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
 }
 
 .font-size-xlg {
@@ -14388,7 +14387,6 @@ body {
   -webkit-background-clip: initial;
   -webkit-text-fill-color: initial;
   background-clip: initial;
-  text-fill-color: initial;
   background: none !important;
   color: #fff;
 }

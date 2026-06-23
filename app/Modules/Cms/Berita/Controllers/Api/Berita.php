@@ -2,9 +2,11 @@
 
 namespace Berita\Controllers\Api;
 
+use Exception;
 use CodeIgniter\API\ResponseTrait;
 use App\Libraries\DataTable;
-//use Hermawan\DataTables\DataTable;
+
+
 
 class Berita extends \Base\Controllers\BaseResourceController
 {
@@ -27,7 +29,7 @@ class Berita extends \Base\Controllers\BaseResourceController
         $data = $this->beritaModel->findAll();
         return $this->respond($data);
     }
-    
+
     public function datatable($slug = null)
     {
         $db = db_connect('default');
@@ -51,16 +53,16 @@ class Berita extends \Base\Controllers\BaseResourceController
                 return $html;
             })
             ->edit('category', function ($row) {
-                $html = '<span class="badge badge-primary badge-pill">' .$row->category . '</span> ';
+                $html = '<span class="badge badge-primary badge-pill">' . $row->category . '</span> ';
                 if (!empty($row->category_sub)) {
-                    $html .='<br><span class="badge badge-secondary badge-pill">' .$row->category_sub .'</span>';
+                    $html .= '<br><span class="badge badge-secondary badge-pill">' . $row->category_sub . '</span>';
                 }
                 return $html;
             })
             ->edit('active', function ($row) {
                 $status = $row->active == 1 ? 'Active' : 'Inactive';
                 $class = $row->active == 1 ? 'success' : 'danger';
-                $html ='<span class="badge badge-' . $class . '  badge-pill">' .$status .'</span>';
+                $html = '<span class="badge badge-' . $class . '  badge-pill">' . $status . '</span>';
                 return $html;
             })
             ->edit('description', function ($row) {

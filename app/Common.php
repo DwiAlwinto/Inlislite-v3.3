@@ -393,19 +393,8 @@ function get_message($name)
 }
 function getClientIpAddress()
 {
-	return ('127.0.0.1');
-}
-function dd($object)
-{
-	echo '<pre>';
-	print_r($object);
-	echo '</pre>';
-	exit();
-}
-function ddd($object)
-{
-	print_r($object);
-	exit();
+	$request = service('request');
+	return $request->getIPAddress();
 }
 
 /*
@@ -519,9 +508,6 @@ function set_setting_parameterwithbranch($paramName, $paramValue, $branch = fals
 	$builder = new DataModel($tableName);
 	$query = $builder->where('Name', $paramName);
 
-	if ($branch) {
-		$query->where('Branch_id', user()->branch_id);
-	}
 
 	$param = $query->get()->getRow();
 

@@ -2,10 +2,11 @@
 
 namespace KartuAnggota\Controllers\Api;
 
+use Exception;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\Files\File;
 use App\Libraries\DataTable;
-//use Hermawan\DataTables\DataTable;
+
 
 class KartuAnggota extends \Base\Controllers\BaseResourceController
 {
